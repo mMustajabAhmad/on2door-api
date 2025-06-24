@@ -1,4 +1,4 @@
-class Administrators::SessionsController < Devise::SessionsController
+class Drivers::SessionsController < Devise::SessionsController
   respond_to :json
 
   private
@@ -13,7 +13,7 @@ class Administrators::SessionsController < Devise::SessionsController
         message: 'Logged in successfully',
         token: @token,
         data: {
-          administrator: AdministratorSerializer.new(resource).serializable_hash[:data][:attributes]
+          driver: DriverSerializer.new(resource).serializable_hash[:data][:attributes]
         }
       }
     }, status: :ok
@@ -24,7 +24,7 @@ class Administrators::SessionsController < Devise::SessionsController
       jwt_payload = JWT.decode(request.headers['Authorization'].split.last, 
                                 Rails.application.credentials.devise_jwt_secret!).first
       
-      current_user = Administrator.find(jwt_payload['sub'])
+      current_user = Driver.find(jwt_payload['sub'])
     end
 
     if current_user

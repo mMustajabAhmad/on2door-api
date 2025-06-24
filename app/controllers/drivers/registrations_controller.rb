@@ -1,4 +1,4 @@
-class Administrators::RegistrationsController < Devise::RegistrationsController
+class Drivers::RegistrationsController < Devise::RegistrationsController
   respond_to :json
 
   private
@@ -13,7 +13,7 @@ class Administrators::RegistrationsController < Devise::RegistrationsController
           code: 200,
           message: 'Signed up successfully',
           token: @token,
-          data: AdministratorSerializer.new(resource).serializable_hash[:data][:attributes]
+          data: DriverSerializer.new(resource).serializable_hash[:data][:attributes]
         }
       }, status: :ok
     else

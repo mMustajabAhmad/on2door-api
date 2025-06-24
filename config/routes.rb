@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
   Rails.application.routes.draw do
-    devise_for :administrators, path: '', path_names: {
+    devise_for :administrators, path: 'administrator', path_names: {
       sign_in: 'login',
       sign_out: 'logout',
       registration: 'signup'
@@ -14,6 +14,16 @@ Rails.application.routes.draw do
     controllers: {
       sessions: 'administrators/sessions',
       registrations: 'administrators/registrations'  
+    }
+
+    devise_for :drivers, path: 'driver', path_names: {
+      sign_in: 'login',
+      sign_out: 'logout',
+      registration: 'signup'
+    },
+    controllers: {
+      sessions: 'drivers/sessions',
+      registrations: 'drivers/registrations'  
     }
   end
 
