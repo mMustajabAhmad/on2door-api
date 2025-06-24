@@ -5,6 +5,29 @@ Rails.application.routes.draw do
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
 
+  Rails.application.routes.draw do
+    devise_for :administrators, path: 'administrator', path_names: {
+      sign_in: 'login',
+      sign_out: 'logout',
+      registration: 'signup'
+    },
+    controllers: {
+      sessions: 'administrators/sessions',
+      registrations: 'administrators/registrations'  
+    }
+
+    devise_for :drivers, path: 'driver', path_names: {
+      sign_in: 'login',
+      sign_out: 'logout',
+      registration: 'signup'
+    },
+    controllers: {
+      sessions: 'drivers/sessions',
+      registrations: 'drivers/registrations'  
+    }
+  end
+
+
   # Defines the root path route ("/")
   # root "posts#index"
 end
