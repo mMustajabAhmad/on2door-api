@@ -1,24 +1,40 @@
-# README
+# On2Door API
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+A real-time driver management and delivery tracking backend built with Rails.
+---
+## Setup Instructions
+### Requirements
+- **Ruby**: 3.3.3
+- **Rails**: 7.2 (API mode)
+- **PostgreSQL**: 16
+---
+### :gear: Installation
+1. Clone Project
+```sh
+git clone https://github.com/DevDenCo/on2door-api.git
+```
+2. Project Directory
+```sh
+cd on2door-api
+```
 
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+3. Install ruby version 3.3.3
+```sh
+rbenv install 3.3.3
+```
+```sh
+ruby -v
+```
+4. Install Gems
+```sh
+bundle install
+```
+5. Steup Database
+```sh
+rails db:create
+rails db:migrate
+```
+6. Start Rails Server
+```sh
+rails server
+```

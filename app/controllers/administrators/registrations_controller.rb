@@ -2,25 +2,21 @@ class Administrators::RegistrationsController < Devise::RegistrationsController
   respond_to :json
 
   private
-
-  def respond_with(resource, _opts = {})
+  def respond_with(resource)
     if resource.persisted?
       @token = request.env['warden-jwt_auth.token']
       headers['Authorization'] = @token
-
       render json: {
-        status: {
-          code: 200,
-          message: 'Signed up successfully',
-          token: @token,
-          data: AdministratorSerializer.new(resource).serializable_hash[:data][:attributes]
-        }
+        status: { 
+          code: 200, 
+          message: 'Signed up successfully.',
+          auth_token: @token,
+          data: AdministratorSerializer.new(resource).serializable_hash[:data][:attributes] }
       }, status: :ok
     else
       render json: {
         status: {
-          code: 422,
-          message: "Signup failed: #{resource.errors.full_messages.to_sentence}"
+          message: "Administrator couldn't be created successfully. #{resource.errors.full_messages.to_sentence}"
         }
       }, status: :unprocessable_entity
     end
