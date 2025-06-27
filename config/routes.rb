@@ -7,24 +7,24 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
   Rails.application.routes.draw do
-    devise_for :administrators, path: 'administrator', path_names: {
+    devise_for :administrators, path: 'api/v1/administrator', path_names: {
       sign_in: 'login',
       sign_out: 'logout',
       registration: 'signup'
     },
     controllers: {
-      sessions: 'administrators/sessions',
-      registrations: 'administrators/registrations'  
+      sessions: 'api/v1/administrators/sessions',
+      registrations: 'api/v1/administrators/registrations'  
     }
 
-    devise_for :drivers, path: 'driver', path_names: {
+    devise_for :drivers, path: 'api/v1/driver', path_names: {
       sign_in: 'login',
       sign_out: 'logout',
       registration: 'signup'
     },
     controllers: {
-      sessions: 'drivers/sessions',
-      registrations: 'drivers/registrations'  
+      sessions: 'api/v1/drivers/sessions',
+      registrations: 'api/v1/drivers/registrations'  
     }
   end
 

@@ -1,16 +1,18 @@
-class Drivers::SessionsController < Devise::SessionsController
+class Api::V1::Administrators::SessionsController < Devise::SessionsController
   respond_to :json
 
   private
-  def respond_with(resource)
+  def respond_with(resource, opt={})
     @token = request.env['warden-jwt_auth.token']
     headers['Authorization'] = @token
+
     render json: {
       status: {
-        code: 200, message: 'Logged in successfully.',
-        token: @token,
+        code: 200,
+        message: 'Logged in successfully.',
+        auth_token: @token,
         data: {
-          driver: DriverSerializer.new(resource).serializable_hash[:data][:attributes]
+          administrator: AdministratorSerializer.new(resource).serializable_hash[:data][:attributes]
         }
       }
     }, status: :ok
@@ -19,9 +21,9 @@ class Drivers::SessionsController < Devise::SessionsController
   def respond_to_on_destroy
     if request.headers['Authorization'].present?
       jwt_payload = JWT.decode(request.headers['Authorization'].split.last,
-                               Rails.application.credentials.devise_jwt_secret_key!).first
+                               Rails.application.credentials.devise_jwt_secret!).first
 
-      current_user = Driver.find(jwt_payload['sub'])
+      current_user = Administrator.find(jwt_payload['sub'])
     end
 
     if current_user

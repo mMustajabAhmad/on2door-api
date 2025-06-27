@@ -1,8 +1,8 @@
-class Administrators::RegistrationsController < Devise::RegistrationsController
+class Api::V1::Administrators::RegistrationsController < Devise::RegistrationsController
   respond_to :json
 
   private
-  def respond_with(resource)
+  def respond_with(resource, opt={})
     if resource.persisted?
       @token = request.env['warden-jwt_auth.token']
       headers['Authorization'] = @token
