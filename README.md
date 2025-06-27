@@ -1,4 +1,4 @@
-# On2Door API
+# Onfleet API
 
 A real-time driver management and delivery tracking backend built with Rails.
 ---
@@ -11,18 +11,16 @@ A real-time driver management and delivery tracking backend built with Rails.
 ### :gear: Installation
 1. Clone Project
 ```sh
-git clone https://github.com/DevDenCo/on2door-api.git
+git clone https://github.com/mMustajabAhmad/onfleet.git
 ```
 2. Project Directory
 ```sh
-cd on2door-api
+cd onfleet
 ```
 
 3. Install ruby version 3.3.3
 ```sh
 rbenv install 3.3.3
-```
-```sh
 ruby -v
 ```
 4. Install Gems
