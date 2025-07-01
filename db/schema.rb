@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_06_25_163821) do
+ActiveRecord::Schema[7.2].define(version: 2025_06_27_094305) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -41,13 +41,14 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_25_163821) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "jti"
-    t.string "name"
     t.integer "role"
     t.string "phone_number"
     t.boolean "is_active"
     t.boolean "is_read_only"
     t.boolean "is_account_owner"
     t.bigint "organization_id"
+    t.string "first_name"
+    t.string "last_name"
     t.index ["email"], name: "index_administrators_on_email", unique: true
     t.index ["jti"], name: "index_administrators_on_jti"
     t.index ["organization_id"], name: "index_administrators_on_organization_id"
@@ -123,6 +124,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_25_163821) do
     t.string "timezone"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "monthly_delivery_volume"
+    t.integer "primary_industry"
+    t.text "message"
     t.index ["email"], name: "index_organizations_on_email", unique: true
   end
 
