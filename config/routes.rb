@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  # Health check
   get '/icon.png', to: proc { [204, {}, ['']] }
   get "up" => "rails/health#show", as: :rails_health_check
 
@@ -12,7 +11,7 @@ Rails.application.routes.draw do
   controllers: {
     sessions: 'api/v1/administrators/sessions',
     registrations: 'api/v1/administrators/registrations',
-    invitations: 'api/v1/invitations' 
+    invitations: 'api/v1/administrators/invitations'
   }
 
   # Devise routes for Driver
@@ -25,6 +24,4 @@ Rails.application.routes.draw do
     sessions: 'api/v1/drivers/sessions',
     registrations: 'api/v1/drivers/registrations'  
   }
-
-  # Optional: You can define extra endpoints here if needed
 end
