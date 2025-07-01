@@ -1,34 +1,30 @@
 Rails.application.routes.draw do
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
+  # Health check
   get '/icon.png', to: proc { [204, {}, ['']] }
   get "up" => "rails/health#show", as: :rails_health_check
 
-  Rails.application.routes.draw do
-    devise_for :administrators, path: 'api/v1/administrator', path_names: {
-      sign_in: 'login',
-      sign_out: 'logout',
-      registration: 'signup'
-    },
-    controllers: {
-      sessions: 'api/v1/administrators/sessions',
-      registrations: 'api/v1/administrators/registrations'  
-    }
+  # Devise routes for Administrator
+  devise_for :administrators, path: 'api/v1/administrator', path_names: {
+    sign_in: 'login',
+    sign_out: 'logout',
+    registration: 'signup'
+  },
+  controllers: {
+    sessions: 'api/v1/administrators/sessions',
+    registrations: 'api/v1/administrators/registrations',
+    invitations: 'api/v1/invitations' 
+  }
 
-    devise_for :drivers, path: 'api/v1/driver', path_names: {
-      sign_in: 'login',
-      sign_out: 'logout',
-      registration: 'signup'
-    },
-    controllers: {
-      sessions: 'api/v1/drivers/sessions',
-      registrations: 'api/v1/drivers/registrations'  
-    }
-  end
+  # Devise routes for Driver
+  devise_for :drivers, path: 'api/v1/driver', path_names: {
+    sign_in: 'login',
+    sign_out: 'logout',
+    registration: 'signup'
+  },
+  controllers: {
+    sessions: 'api/v1/drivers/sessions',
+    registrations: 'api/v1/drivers/registrations'  
+  }
 
-
-  # Defines the root path route ("/")
-  # root "posts#index"
+  # Optional: You can define extra endpoints here if needed
 end
