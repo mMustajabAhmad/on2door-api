@@ -13,13 +13,14 @@ class Api::V1::Drivers::InvitationsController < Devise::InvitationsController
         first_name: params[:first_name],
         last_name: params[:last_name],
         phone_number: params[:phone_number],
+        is_active: false,
         organization_id: current_administrator.organization_id
       },
       current_administrator
     )
     render json: {
       message: "Invitation sent",
-      driver: DriverSerializer.new(driver).serializable_hash[:data][:attributes]
+      driver: DriverSerializer.new(driver).as_json
     }, status: :ok
   rescue => e
     render json: {
@@ -35,12 +36,14 @@ class Api::V1::Drivers::InvitationsController < Devise::InvitationsController
       :password_confirmation
     ))
     if driver.errors.empty?
-      render json: { 
+      render json: {
         message: "Invitation accepted", 
-        driver: DriverSerializer.new(driver).serializable_hash[:data][:attributes]
+        driver: DriverSerializer.new(driver).as_json
       }, status: :ok
     else
-      render json: { error: driver.errors.full_messages }, status: :unprocessable_entity
+      render json: {
+        error: driver.errors.full_messages
+      }, status: :unprocessable_entity
     end
   end
 end
