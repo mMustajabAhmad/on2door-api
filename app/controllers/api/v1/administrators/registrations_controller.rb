@@ -68,8 +68,8 @@ class Api::V1::Administrators::RegistrationsController < Devise::RegistrationsCo
     def render_success_response(resource)
       @token = request.env['warden-jwt_auth.token']
       headers['Authorization'] = @token
-      administrator_data = AdministratorSerializer.new(resource).serializable_hash[:data][:attributes]
-      organization_data = OrganizationSerializer.new(resource.organization).serializable_hash[:data][:attributes]
+      administrator_data = AdministratorSerializer.new(resource).as_json
+      organization_data = OrganizationSerializer.new(resource.organization).as_json
       administrator_data[:organization] = organization_data
       render json: {
         status: {

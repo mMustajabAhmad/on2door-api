@@ -1,6 +1,7 @@
 class Organization < ApplicationRecord
   has_many :administrators, dependent: :destroy
-  
+  has_many :drivers, dependent: :destroy
+
   enum monthly_delivery_volume: {
     range_0_100: 0,
     range_101_2000: 1,

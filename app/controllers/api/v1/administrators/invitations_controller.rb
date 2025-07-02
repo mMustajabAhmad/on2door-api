@@ -1,6 +1,5 @@
 class Api::V1::Administrators::InvitationsController < Devise::InvitationsController
   before_action :authenticate_administrator!
-  
   respond_to :json
 
   # POST /api/v1/invitations
@@ -18,13 +17,14 @@ class Api::V1::Administrators::InvitationsController < Devise::InvitationsContro
     },
       current_administrator
     )
-
     render json: {
       message: "Invitation sent",
-      admin: admin
+      administrator: AdministratorSerializer.new(admin).as_json
     }, status: :ok
   rescue => e
-    render json: { error: e.message }, status: :unprocessable_entity
+    render json: { 
+      error: e.message
+    }, status: :unprocessable_entity
   end
 
   # PUT /api/v1/invitation/accept
@@ -40,7 +40,7 @@ class Api::V1::Administrators::InvitationsController < Devise::InvitationsContro
     if admin.errors.empty?
       render json: {
         message: "Invitation accepted",
-        admin: admin
+        administrator: AdministratorSerializer.new(admin).as_json
       }, status: :ok
     else
       render json: {
