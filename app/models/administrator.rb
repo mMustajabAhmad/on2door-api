@@ -8,7 +8,7 @@ class Administrator < ApplicationRecord
   belongs_to :organization
   after_invitation_accepted :activate_admin
 
-  enum :role, [ :account_owner, :admin, :dispatcher ]
+  enum :role, [ :owner, :admin, :dispatcher ]
 
   def activate_admin
     update(is_active: true)

@@ -12,7 +12,8 @@ class Api::V1::Drivers::RegistrationsController < Devise::RegistrationsControlle
           code: 200, 
           message: 'Signed up successfully.',
           auth_token: @token,
-          data: DriverSerializer.new(resource).serializable_hash[:data][:attributes] }
+          driver: DriverSerializer.new(resource).as_json
+        }
       }, stauts: :ok
     else
       render json: {
