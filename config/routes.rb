@@ -22,6 +22,7 @@ Rails.application.routes.draw do
   },
   controllers: {
     sessions: 'api/v1/drivers/sessions',
-    registrations: 'api/v1/drivers/registrations'  
+    registrations: 'api/v1/drivers/registrations',
+    invitations: 'api/v1/drivers/invitations'
   }
 end
