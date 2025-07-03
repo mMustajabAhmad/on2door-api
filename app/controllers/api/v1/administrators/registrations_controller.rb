@@ -21,19 +21,18 @@ class Api::V1::Administrators::RegistrationsController < Devise::RegistrationsCo
         render_error_response(resource)
       end
     end
-  rescue ActiveRecord::RecordInvalid => e 
+
+  rescue ActiveRecord::RecordInvalid => e
     render json: {
-      status: {
-        message: e.message
-      }
+      message: e.message
     }, status: :unprocessable_entity
   end
 
   private
-  
+
     def configure_signup_params
       devise_parameter_sanitizer.permit(:sign_up, keys:[
-        :first_name, 
+        :first_name,
         :last_name,
         :phone_number,
         :email,
@@ -52,9 +51,9 @@ class Api::V1::Administrators::RegistrationsController < Devise::RegistrationsCo
       params.require(:administrator).permit(
         :first_name,
         :last_name,
-        :email, 
+        :email,
         :password,
-        :phone_number, 
+        :phone_number,
         organization_attributes: [
           :name,
           :country,
@@ -71,20 +70,16 @@ class Api::V1::Administrators::RegistrationsController < Devise::RegistrationsCo
       administrator_data = AdministratorSerializer.new(resource).as_json
       organization_data = OrganizationSerializer.new(resource.organization).as_json
       administrator_data[:organization] = organization_data
+
       render json: {
-        status: {
-          message: 'Signed up successfully.',
-          auth_token: @token,
-          data: administrator_data
-        }
+        auth_token: @token,
+        data: administrator_data
       }, status: :ok
     end
 
     def render_errror_response(resource)
       render json: {
-        status: {
-          message: "Organization couldn't be created successfully. #{resource.errors.full_messages.to_sentence}"
-        }
+        message: "Organization couldn't be created successfully. #{resource.errors.full_messages.to_sentence}"
       }, status: :unprocessable_entity
     end
 end

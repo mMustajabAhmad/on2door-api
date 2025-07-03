@@ -3,24 +3,17 @@ class Api::V1::Drivers::RegistrationsController < Devise::RegistrationsControlle
 
   private
 
-    def respond_with(resource, opt={})
+    def respond_with(resource, _opts = {})
       if resource.persisted?
         @token = request.env['warden-jwt_auth.token']
         headers['Authorization'] = @token
-
         render json: {
-          status: { 
-            code: 200, 
-            message: 'Signed up successfully.',
-            auth_token: @token,
-            driver: DriverSerializer.new(resource).as_json
-          }
+          token: @token,
+          driver: DriverSerializer.new(resource).as_json
         }, stauts: :ok
       else
         render json: {
-          status: { 
-            message: "Driver couldn't be created successfully. #{resource.errors.full_messages.to_sentence}" 
-          }
+          message: "Driver couldn't be created successfully. #{resource.errors.full_messages.to_sentence}"
         }, status: :unprocessable_entity
       end
     end
