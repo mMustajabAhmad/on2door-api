@@ -3,6 +3,13 @@ class Api::V1::Administrators::InvitationsController < Devise::InvitationsContro
   before_action :authenticate_administrator!
 
   def create
+    if params[:role] == 'owner'
+      render json: { 
+        error: "You cannot invite an owner."
+      }, status: :unprocessable_entity
+      return
+    end
+    
     admin = Administrator.invite!(
       {
         email: params[:email],
