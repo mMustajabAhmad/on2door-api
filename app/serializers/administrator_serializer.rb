@@ -9,4 +9,8 @@ class AdministratorSerializer
       inviter&.role
     end
   end
+
+  attribute :teams do |object|
+    object.team_ids
+  end
 end

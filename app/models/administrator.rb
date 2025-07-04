@@ -7,6 +7,8 @@ class Administrator < ApplicationRecord
 
   belongs_to :organization
   after_invitation_accepted :activate_admin
+  has_and_belongs_to_many :teams
+  validates :is_account_owner, uniqueness: { scope: :organization_id }, if: :is_account_owner?
 
   enum :role, [ :owner, :admin, :dispatcher ]
 

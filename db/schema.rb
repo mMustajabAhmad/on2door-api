@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_07_02_085637) do
+ActiveRecord::Schema[7.2].define(version: 2025_07_03_134019) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -220,6 +220,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_02_085637) do
     t.bigint "organization_id"
     t.bigint "hub_id"
     t.index ["hub_id"], name: "index_teams_on_hub_id"
+    t.index ["organization_id", "name"], name: "index_teams_on_organization_id_and_name", unique: true
     t.index ["organization_id"], name: "index_teams_on_organization_id"
   end
 
