@@ -2,7 +2,7 @@ class Api::V1::Administrators::AdminsController < ApplicationController
 
   def index
     administrator_type = params[:administrator_type]
-    adminis = 
+    administrators =
     if administrator_type == 'admin'
       if current_administrator.role.in?(['owner', 'admin'])
         current_administrator.organization.administrators.where(role: ['owner', 'admin'])
@@ -18,11 +18,14 @@ class Api::V1::Administrators::AdminsController < ApplicationController
         Administrator.none
       end
     else
-      Administrators.none
+      Administrator.none
     end
 
+    pagy, administrators = pagy(administrators, page: (params[:page]), items: (params[:per_page]))
+
     render json: {
-      admins: AdministratorSerializer.new(adminis).as_json
-    }
+      admins: AdministratorSerializer.new(administrators).as_json,
+      pagy: pagy
+    }, status: :ok
   end
 end
