@@ -9,10 +9,12 @@ class Api::V1::Administrators::TeamsController < ApplicationController
     else
       teams = Team.none
     end
+
+    pagy, teams = pagy(teams, limit: params[:per_page] || 10)
   
     render json: {
       teams: TeamSerializer.new(teams).serializable_hash,
-      pagy: pagy
+      pagy: @pagy
     }, status: :ok
   end
 
