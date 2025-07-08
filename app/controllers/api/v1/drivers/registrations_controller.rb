@@ -2,7 +2,6 @@ class Api::V1::Drivers::RegistrationsController < Devise::RegistrationsControlle
   respond_to :json
 
   private
-
     def respond_with(resource, _opts = {})
       if resource.persisted?
         @token = request.env['warden-jwt_auth.token']

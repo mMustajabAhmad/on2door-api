@@ -2,7 +2,6 @@ class Api::V1::Drivers::SessionsController < Devise::SessionsController
   respond_to :json
 
   private
-
     def respond_with(resource, _opt = {})
       @token = request.env['warden-jwt_auth.token']
       headers['Authorization'] = @token
