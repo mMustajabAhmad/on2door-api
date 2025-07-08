@@ -29,7 +29,6 @@ class Api::V1::Administrators::RegistrationsController < Devise::RegistrationsCo
   end
 
   private
-
     def configure_signup_params
       devise_parameter_sanitizer.permit(:sign_up, keys:[
         :first_name,
