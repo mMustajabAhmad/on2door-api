@@ -6,6 +6,7 @@ class Driver < ApplicationRecord
          :recoverable, :rememberable, :validatable,
          :jwt_authenticatable, jwt_revocation_strategy: self
 
+  belongs_to :organization
   after_invitation_accepted :activate_driver
   has_and_belongs_to_many :teams, join_table: :drivers_teams
 
