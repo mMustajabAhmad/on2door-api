@@ -1,5 +1,5 @@
 class Api::V1::Administrators::TeamsController < ApplicationController
-  before_action :authenticate_administrator_role, only: [:show, :create, :update]
+  before_action :authenticate_administrator_role, only: [:show, :create, :update, :destroy]
 
   def index
     if current_administrator.role.in?(['owner', 'admin'])
@@ -10,11 +10,12 @@ class Api::V1::Administrators::TeamsController < ApplicationController
       teams = Team.none
     end
 
-    pagy, teams = pagy(teams, limit: params[:per_page] || 10)
-  
+    q = teams.ransack(params[:q])
+    pagy, teams = pagy(q.result, page: params[:page],limit: params[:per_page])
+
     render json: {
       teams: TeamSerializer.new(teams).serializable_hash,
-      pagy: @pagy
+      pagy: pagy
     }, status: :ok
   end
 
@@ -24,6 +25,11 @@ class Api::V1::Administrators::TeamsController < ApplicationController
     render json: {
       team: TeamSerializer.new(team).as_json
     }, status: :ok
+
+  rescue ActiveRecord::RecordNotFound
+    render json: {
+      error: 'Team not found'
+    }, status: :not_found
   end
 
   def create
@@ -51,7 +57,7 @@ class Api::V1::Administrators::TeamsController < ApplicationController
     end
 
   rescue => e
-    render json: { 
+    render json: {
       error: e.message
     }, status: :unprocessable_entity
   end
@@ -60,7 +66,7 @@ class Api::V1::Administrators::TeamsController < ApplicationController
     team = current_administrator.organization.teams.find(params[:id])
     
     if team.update(team_params.except(:dispatcher_ids))
-      if team_params[:dispatcher_ids].present?
+      if team_params.key?(:dispatcher_ids)
         dispatchers = Administrator.where(
           id: team_params[:dispatcher_ids],
           role: 'dispatcher',
@@ -78,16 +84,32 @@ class Api::V1::Administrators::TeamsController < ApplicationController
       }, status: :unprocessable_entity
     end
 
-  rescue => e
+  rescue ActiveRecord::RecordNotFound
     render json: {
-      error: e.message
-    }, status: :unprocessable_entity
+      error: 'Team not found'
+    }, status: :not_found
   end
 
+  def destroy
+    team = current_administrator.organization.teams.find(params[:id])
+    if team.destroy
+      render json: {
+        message: 'Team deleted successfully'
+      }, status: :ok
+    else
+      render json: {
+        error: team.errors.full_messages.to_sentence
+      }, status: :unprocessable_entity
+    end
+
+  rescue ActiveRecord::RecordNotFound
+    render json: {
+      error: 'Team not found'
+    }, status: :not_found
+  end
 
   private
-
-    def team_params 
+    def team_params
       params.require(:team).permit(:name, :enable_self_assign, :hub_id, dispatcher_ids: [])
     end
 
