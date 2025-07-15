@@ -29,7 +29,7 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       namespace :administrators do
-        resources :admins, only: [:index]
+        resources :administrators, only: [:index, :show, :update, :destroy]
         resources :teams, only: [:index, :create, :show, :update, :destroy]
       end
     end
