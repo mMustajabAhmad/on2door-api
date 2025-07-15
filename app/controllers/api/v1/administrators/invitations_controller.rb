@@ -1,16 +1,11 @@
 class Api::V1::Administrators::InvitationsController < Devise::InvitationsController
-  respond_to :json
-  before_action :authenticate_administrator!
 
   def create
-    if params[:role] == 'owner'
-      render json: {
-        error: "You cannot invite an owner."
-      }, status: :unprocessable_entity
-      return
-    end
+    authorize! :create, Administrator.new(role: params[:role])
 
-    admin = Administrator.invite!(
+    return render json: { error: 'Phone number has already been taken within organization' }, status: :unprocessable_entity if Administrator.exists?(phone_number: params[:phone_number], organization_id: current_administrator.organization_id)
+
+    administrator = Administrator.invite!(
       {
         email: params[:email],
         first_name: params[:first_name],
@@ -21,44 +16,31 @@ class Api::V1::Administrators::InvitationsController < Devise::InvitationsContro
         is_account_owner: false,
         is_active: false,
         organization_id: current_administrator.organization_id,
-        pending_team_ids: params[:role] == 'dispatcher' ? params[:team_ids]&.map(&:to_i) : nil
+        pending_team_ids: params[:role] == 'dispatcher' ? params[:team_ids] : nil
       },
       current_administrator
     )
 
-    render json: {
-      administrator: AdministratorSerializer.new(admin).as_json
-    }, status: :ok
-
-  rescue => e
-    render json: {
-      error: e.message
-    }, status: :unprocessable_entity
+    render json: { administrator: AdministratorSerializer.new(administrator).as_json }, status: :ok
   end
 
   def update
-    admin = Administrator.accept_invitation!(
+    administrator = Administrator.accept_invitation!(
       params.permit(
       :invitation_token,
       :password,
       :password_confirmation
     ))
 
-    if admin.role == 'dispatcher' && admin.pending_team_ids.present?
-      teams = Team.where(id: admin.pending_team_ids, organization_id: admin.organization_id)
-      admin.teams = teams
-      admin.pending_team_ids = nil
-      admin.save
+    if administrator.role == 'dispatcher' && administrator.pending_team_ids?
+      administrator.teams = Team.where(id: administrator.pending_team_ids, organization_id: administrator.organization_id)
+      administrator.update(pending_team_ids: nil)
     end
 
-    if admin.valid?
-      render json: {
-        administrator: AdministratorSerializer.new(admin).as_json
-      }, status: :ok
+    if administrator.valid?
+      render json: { administrator: AdministratorSerializer.new(administrator).as_json }, status: :ok
     else
-      render json: {
-        error: admin.errors.full_messages
-      }, status: :unprocessable_entity
+      render json: { error: administrator.errors.full_messages }, status: :unprocessable_entity
     end
   end
 end
