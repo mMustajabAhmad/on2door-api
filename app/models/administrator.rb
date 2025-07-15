@@ -8,7 +8,9 @@ class Administrator < ApplicationRecord
   belongs_to :organization
   accepts_nested_attributes_for :organization
   after_invitation_accepted :activate_admin
-  has_and_belongs_to_many :teams, join_table: :administrators_teams
+  has_and_belongs_to_many :teams, dependent: :nullify
+
+  validates :phone_number, uniqueness: { scope: :organization_id }
 
   enum :role, [ :owner, :admin, :dispatcher ]
 
