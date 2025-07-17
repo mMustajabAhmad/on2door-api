@@ -50,8 +50,10 @@ end
 group :development do
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
+  gem 'bullet'
 end
 
 gem "pagy", "~> 9.3"
 gem 'ransack'
 gem 'cancancan'
+gem 'byebug'
