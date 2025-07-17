@@ -1,4 +1,4 @@
-module CountryCodeHelper
+module CountryTimezone
   extend ActiveSupport::Concern
 
   def country_code(country)
@@ -17,5 +17,11 @@ module CountryCodeHelper
     return match.alpha2 if match
 
     nil
+  end
+
+  def timezone_for_country(country)
+    code = country_code(country)
+    return nil if code.nil?
+    TZInfo::Country.get(code).zones.first&.identifier || 'UTC'
   end
 end
