@@ -1,8 +1,9 @@
 class Api::V1::Administrators::AdministratorsController < ApplicationController
+  before_action :authenticate_administrator!
   load_and_authorize_resource
 
   def index
-    @administrators = params[:administrator_type] == 'admin' ? @administrators.where(role: ['owner', 'admin']) :  @administrators.where(role: 'dispatcher')
+    @administrators = params[:administrator_type] == 'admin' ? @administrators.admins_and_owners :  @administrators.dispatcher
 
     q = @administrators.ransack(params[:q])
     pagy, records = pagy(q.result, page: params[:page], limit: params[:per_page])
@@ -15,8 +16,7 @@ class Api::V1::Administrators::AdministratorsController < ApplicationController
   end
 
   def update
-    if @administrator.update(administrator_params.except(:team_ids))
-      @administrator.teams = Team.where(id: params[:administrator][:team_ids], organization_id: current_administrator.organization_id) if @administrator.role == 'dispatcher' && params[:administrator][:team_ids]
+    if @administrator.update(administrator_params)
       render json: { administrator: AdministratorSerializer.new(@administrator).as_json }, status: :ok
     else
       render json: { error: @administrator.errors.full_messages.to_sentence }, status: :unprocessable_entity
