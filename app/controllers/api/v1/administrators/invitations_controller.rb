@@ -1,9 +1,8 @@
 class Api::V1::Administrators::InvitationsController < Devise::InvitationsController
+  before_action :authenticate_administrator!, only: [:create]
 
   def create
     authorize! :create, Administrator.new(role: params[:role])
-
-    return render json: { error: 'Phone number has already been taken within organization' }, status: :unprocessable_entity if Administrator.exists?(phone_number: params[:phone_number], organization_id: current_administrator.organization_id)
 
     administrator = Administrator.invite!(
       {
@@ -32,10 +31,7 @@ class Api::V1::Administrators::InvitationsController < Devise::InvitationsContro
       :password_confirmation
     ))
 
-    if administrator.role == 'dispatcher' && administrator.pending_team_ids?
-      administrator.teams = Team.where(id: administrator.pending_team_ids, organization_id: administrator.organization_id)
-      administrator.update(pending_team_ids: nil)
-    end
+    administrator.assign_pending_teams
 
     if administrator.valid?
       render json: { administrator: AdministratorSerializer.new(administrator).as_json }, status: :ok
