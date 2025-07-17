@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_07_07_071306) do
+ActiveRecord::Schema[7.2].define(version: 2025_07_16_172206) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -64,6 +64,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_07_071306) do
     t.index ["invited_by_type", "invited_by_id"], name: "index_administrators_on_invited_by"
     t.index ["jti"], name: "index_administrators_on_jti"
     t.index ["organization_id"], name: "index_administrators_on_organization_id"
+    t.index ["phone_number"], name: "index_administrators_on_phone_number", unique: true
     t.index ["reset_password_token"], name: "index_administrators_on_reset_password_token", unique: true
   end
 
@@ -131,6 +132,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_07_071306) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "organization_id"
+    t.index ["organization_id", "name"], name: "index_hubs_on_organization_id_and_name", unique: true
+    t.index ["organization_id"], name: "index_hubs_on_organization_id"
   end
 
   create_table "linked_tasks", force: :cascade do |t|
@@ -240,6 +244,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_07_071306) do
   add_foreign_key "administrators", "organizations"
   add_foreign_key "drivers", "organizations"
   add_foreign_key "feedbacks", "tasks"
+  add_foreign_key "hubs", "organizations"
   add_foreign_key "linked_tasks", "tasks"
   add_foreign_key "linked_tasks", "tasks", column: "linked_task_id"
   add_foreign_key "schedules", "drivers"
