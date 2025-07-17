@@ -1,16 +1,9 @@
 class Api::V1::Administrators::RegistrationsController < Devise::RegistrationsController
-  include CountryCodeHelper
+  before_action :configure_permitted_parameters, only: [:create]
 
   def create
     ActiveRecord::Base.transaction do
-      country = signup_params[:organization_attributes][:country]
-      return render json: { message: "Invalid country name: #{country}. Please use the official English country name or 2-letter code." }, status: :unprocessable_entity if (code = country_code(country)).nil?
-
-      timezone = TZInfo::Country.get(code).zones.first&.identifier || 'UTC'
-      organization_attrs = signup_params[:organization_attributes].merge(
-        email: signup_params[:email],
-        timezone: timezone
-      )
+      organization_attrs = signup_params[:organization_attributes].merge(email: signup_params[:email])
       organization = Organization.create!(organization_attrs)
 
       build_resource(signup_params.except(:organization_attributes))
