@@ -6,4 +6,6 @@ class AdministratorSerializer
   attribute :invited_by_role, if: Proc.new { |administrator| administrator.invited_by_id.present? } do |administrator|
     Administrator.find_by(id: administrator.invited_by_id)&.role
   end
+
+  attribute :auth_token, Proc.new { |admin, params| params[:auth_token] }
 end
