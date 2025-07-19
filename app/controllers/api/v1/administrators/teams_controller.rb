@@ -24,6 +24,8 @@ class Api::V1::Administrators::TeamsController < ApplicationController
   end
 
   def update
+    return render json: { error: 'Team must have atleast one driver' }, status: :unprocessable_entity if team_params[:driver_ids]&.blank?
+
     if @team.update(team_params)
       render json: { team: TeamSerializer.new(@team).as_json }, status: :ok
     else
@@ -41,6 +43,6 @@ class Api::V1::Administrators::TeamsController < ApplicationController
 
   private
     def team_params
-      params.require(:team).permit(:name, :hub_id, administrator_ids: [])
+      params.require(:team).permit(:name, :hub_id, administrator_ids: [], driver_ids: [])
     end
 end
