@@ -14,7 +14,7 @@ class Api::V1::Administrators::HubsController < ApplicationController
   end
 
   def create
-    @hub = Hub.new(hub_params.merge(organization_id: current_administrator.organization_id))
+    @hub = Hub.new(hub_params)
 
     if @hub.save
       render json: HubSerializer.new(@hub).as_json, status: :ok
@@ -33,7 +33,7 @@ class Api::V1::Administrators::HubsController < ApplicationController
 
   def destroy
     if @hub.destroy
-      render json: { message: "Hub deleted successfully." }, status: :ok
+      render json: { message: 'Hub deleted successfully.' }, status: :ok
     else
       render json: { error: @hub.errors.full_messages.to_sentence }, status: :unprocessable_entity
     end
