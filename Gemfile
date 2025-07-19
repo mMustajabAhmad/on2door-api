@@ -57,3 +57,4 @@ gem "pagy", "~> 9.3"
 gem 'ransack'
 gem 'cancancan'
 gem 'byebug'
+gem 'acts_as_tenant'
