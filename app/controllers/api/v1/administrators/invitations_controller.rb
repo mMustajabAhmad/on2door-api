@@ -14,7 +14,6 @@ class Api::V1::Administrators::InvitationsController < Devise::InvitationsContro
         is_read_only: params[:role] == 'dispatcher' ? params[:is_read_only] : false,
         is_account_owner: false,
         is_active: false,
-        organization_id: current_administrator.organization_id,
         pending_team_ids: params[:role] == 'dispatcher' ? params[:team_ids] : nil
       },
       current_administrator
