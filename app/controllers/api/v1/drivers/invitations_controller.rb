@@ -1,13 +1,15 @@
 class Api::V1::Drivers::InvitationsController < Devise::InvitationsController
-  respond_to :json
   before_action :authenticate_administrator!, only: [:create]
-  before_action :authenticate_driver!, only: [:update]
 
   def devise_mapping
-    Devise.mappings[:administrator]
+    action_name == 'create' ? Devise.mappings[:administrator] : Devise.mappings[:driver]
   end
 
   def create
+    authorize! :create, Driver.new(organization_id: current_administrator.organization_id)
+
+    return render json: { error: "At least one team must be assigned" }, status: :unprocessable_entity if params[:team_ids].blank?
+
     driver = Driver.invite!(
       {
         email: params[:email],
@@ -15,19 +17,12 @@ class Api::V1::Drivers::InvitationsController < Devise::InvitationsController
         last_name: params[:last_name],
         phone_number: params[:phone_number],
         is_active: false,
-        organization_id: current_administrator.organization_id
+        pending_team_ids: params[:team_ids]
       },
       current_administrator
     )
 
-    render json: {
-      driver: DriverSerializer.new(driver).as_json
-    }, status: :ok
-
-  rescue => e
-    render json: {
-      error: e.message
-    }, status: :unprocessable_entity
+    render json: { driver: DriverSerializer.new(driver).as_json }, status: :ok
   end
 
   def update
@@ -38,14 +33,12 @@ class Api::V1::Drivers::InvitationsController < Devise::InvitationsController
       :password_confirmation
     ))
 
+    driver.assign_pending_teams
+
     if driver.valid?
-      render json: {
-        driver: DriverSerializer.new(driver).as_json
-      }, status: :ok
+      render json: { driver: DriverSerializer.new(driver).as_json }, status: :ok
     else
-      render json: {
-        error: driver.errors.full_messages
-      }, status: :unprocessable_entity
+      render json: { error: driver.errors.full_messages }, status: :unprocessable_entity
     end
   end
 end
