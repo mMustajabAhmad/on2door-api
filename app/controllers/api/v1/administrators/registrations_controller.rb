@@ -1,5 +1,6 @@
 class Api::V1::Administrators::RegistrationsController < Devise::RegistrationsController
   before_action :configure_permitted_parameters, only: [:create]
+  skip_before_action :set_current_organization
 
   def create
     ActiveRecord::Base.transaction do
@@ -54,10 +55,10 @@ class Api::V1::Administrators::RegistrationsController < Devise::RegistrationsCo
     def render_success_response(resource)
       @token = request.env['warden-jwt_auth.token']
       headers['Authorization'] = @token
-      administrator_data = AdministratorSerializer.new(resource).as_json
+      administrator_data = AdministratorSerializer.new(resource, params: {auth_token: @token}).as_json
       organization_data = OrganizationSerializer.new(resource.organization).as_json
       administrator_data[:organization] = organization_data
 
-      render json: { auth_token: @token, data: administrator_data }, status: :ok
+      render json: { data: administrator_data }, status: :ok
     end
 end
