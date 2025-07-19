@@ -3,8 +3,7 @@ class Api::V1::Administrators::OrganizationsController < ApplicationController
   load_and_authorize_resource
 
   def index
-    @organization = current_administrator.organization
-    render json: { organization: OrganizationSerializer.new(@organization).as_json }, status: :ok
+    render json: { organization: OrganizationSerializer.new(ActsAsTenant.current_tenant).as_json }, status: :ok
   end
 
   def update
