@@ -14,7 +14,7 @@ class Api::V1::Administrators::TeamsController < ApplicationController
   end
 
   def create
-    @team = Team.new(team_params.merge(organization_id: current_administrator.organization_id))
+    @team = Team.new(team_params)
 
     if @team.save
       render json: { team: TeamSerializer.new(@team).as_json }, status: :ok
