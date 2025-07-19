@@ -25,4 +25,15 @@ Rails.application.routes.draw do
     registrations: 'api/v1/drivers/registrations',
     invitations: 'api/v1/drivers/invitations'
   }
+
+  namespace :api do
+    namespace :v1 do
+      namespace :administrators do
+        resources :teams, only: [:index, :show, :create, :update, :destroy]
+        resources :administrators, only: [:index, :show, :update, :destroy]
+        resources :organizations, only: [:index, :update, :destroy]
+        resources :hubs, only: [:index, :show, :create, :update, :destroy]
+      end
+    end
+  end
 end

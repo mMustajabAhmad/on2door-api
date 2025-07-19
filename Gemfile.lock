@@ -72,6 +72,8 @@ GEM
       minitest (>= 5.1)
       securerandom (>= 0.3)
       tzinfo (~> 2.0, >= 2.0.5)
+    acts_as_tenant (1.0.1)
+      rails (>= 6.0)
     base64 (0.3.0)
     bcrypt (3.1.20)
     benchmark (0.4.1)
@@ -79,8 +81,15 @@ GEM
     bootsnap (1.18.6)
       msgpack (~> 1.2)
     builder (3.3.0)
+    bullet (8.0.8)
+      activesupport (>= 3.0.0)
+      uniform_notifier (~> 1.11)
+    byebug (12.0.0)
+    cancancan (3.6.1)
     concurrent-ruby (1.3.5)
     connection_pool (2.5.3)
+    countries (8.0.2)
+      unaccent (~> 0.3)
     crass (1.0.6)
     date (3.4.1)
     debug (1.11.0)
@@ -168,6 +177,7 @@ GEM
     nokogiri (1.18.8-x86_64-linux-musl)
       racc (~> 1.4)
     orm_adapter (0.5.0)
+    pagy (9.3.4)
     pg (1.5.9)
     pp (0.6.2)
       prettyprint
@@ -219,6 +229,10 @@ GEM
       thor (~> 1.0, >= 1.2.2)
       zeitwerk (~> 2.6)
     rake (13.3.0)
+    ransack (4.3.0)
+      activerecord (>= 6.1.5)
+      activesupport (>= 6.1.5)
+      i18n
     rdoc (6.14.1)
       erb
       psych (>= 4.0.0)
@@ -233,6 +247,8 @@ GEM
     timeout (0.4.3)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
+    unaccent (0.4.0)
+    uniform_notifier (1.17.0)
     useragent (0.16.11)
     warden (1.2.9)
       rack (>= 2.0.9)
@@ -258,17 +274,25 @@ PLATFORMS
   x86_64-linux-musl
 
 DEPENDENCIES
+  acts_as_tenant
   bootsnap
+  bullet
+  byebug
+  cancancan
+  countries
   debug
   devise
   devise-jwt
   devise_invitable
   dotenv-rails (~> 2.1, >= 2.1.1)
   jsonapi-serializer
+  pagy (~> 9.3)
   pg (~> 1.1)
   puma (>= 5.0)
   rack-cors
   rails (~> 7.2)
+  ransack
+  tzinfo
   tzinfo-data
 
 RUBY VERSION

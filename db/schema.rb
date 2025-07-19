@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_07_02_085637) do
+ActiveRecord::Schema[7.2].define(version: 2025_07_16_172206) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -57,12 +57,14 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_02_085637) do
     t.string "invited_by_type"
     t.bigint "invited_by_id"
     t.integer "invitations_count", default: 0
+    t.integer "pending_team_ids", array: true
     t.index ["email"], name: "index_administrators_on_email", unique: true
     t.index ["invitation_token"], name: "index_administrators_on_invitation_token", unique: true
     t.index ["invited_by_id"], name: "index_administrators_on_invited_by_id"
     t.index ["invited_by_type", "invited_by_id"], name: "index_administrators_on_invited_by"
     t.index ["jti"], name: "index_administrators_on_jti"
     t.index ["organization_id"], name: "index_administrators_on_organization_id"
+    t.index ["phone_number"], name: "index_administrators_on_phone_number", unique: true
     t.index ["reset_password_token"], name: "index_administrators_on_reset_password_token", unique: true
   end
 
@@ -100,6 +102,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_02_085637) do
     t.bigint "invited_by_id"
     t.integer "invitations_count", default: 0
     t.boolean "is_active"
+    t.integer "pending_team_ids", array: true
     t.index ["email"], name: "index_drivers_on_email", unique: true
     t.index ["invitation_token"], name: "index_drivers_on_invitation_token", unique: true
     t.index ["invited_by_id"], name: "index_drivers_on_invited_by_id"
@@ -129,6 +132,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_02_085637) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "organization_id"
+    t.index ["organization_id", "name"], name: "index_hubs_on_organization_id_and_name", unique: true
+    t.index ["organization_id"], name: "index_hubs_on_organization_id"
   end
 
   create_table "linked_tasks", force: :cascade do |t|
@@ -164,19 +170,19 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_02_085637) do
 
   create_table "schedules", force: :cascade do |t|
     t.datetime "date"
-    t.bigint "drivers_id", null: false
+    t.bigint "driver_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["drivers_id"], name: "index_schedules_on_drivers_id"
+    t.index ["driver_id"], name: "index_schedules_on_driver_id"
   end
 
   create_table "subschedules", force: :cascade do |t|
-    t.bigint "schedules_id", null: false
+    t.bigint "schedule_id", null: false
     t.datetime "shift_start"
     t.datetime "shift_end"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["schedules_id"], name: "index_subschedules_on_schedules_id"
+    t.index ["schedule_id"], name: "index_subschedules_on_schedule_id"
   end
 
   create_table "task_completion_details", force: :cascade do |t|
@@ -220,6 +226,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_02_085637) do
     t.bigint "organization_id"
     t.bigint "hub_id"
     t.index ["hub_id"], name: "index_teams_on_hub_id"
+    t.index ["organization_id", "name"], name: "index_teams_on_organization_id_and_name", unique: true
     t.index ["organization_id"], name: "index_teams_on_organization_id"
   end
 
@@ -237,10 +244,11 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_02_085637) do
   add_foreign_key "administrators", "organizations"
   add_foreign_key "drivers", "organizations"
   add_foreign_key "feedbacks", "tasks"
+  add_foreign_key "hubs", "organizations"
   add_foreign_key "linked_tasks", "tasks"
   add_foreign_key "linked_tasks", "tasks", column: "linked_task_id"
-  add_foreign_key "schedules", "drivers", column: "drivers_id"
-  add_foreign_key "subschedules", "schedules", column: "schedules_id"
+  add_foreign_key "schedules", "drivers"
+  add_foreign_key "subschedules", "schedules"
   add_foreign_key "tasks", "administrators", column: "creator_id"
   add_foreign_key "tasks", "drivers"
   add_foreign_key "tasks", "organizations"
