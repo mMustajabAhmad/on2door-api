@@ -1,4 +1,4 @@
-class DriverSerializer
+class Api::V1::Drivers::DriverSerializer
   include JSONAPI::Serializer
 
   attributes :id, :email, :first_name, :last_name, :phone_number, :is_active, :organization_id, :pending_team_ids, :team_ids, :invited_by_id, :invited_by_type, :invitation_created_at, :invitation_sent_at, :invitation_accepted_at
