@@ -4,7 +4,7 @@ class Api::V1::Administrators::SessionsController < Devise::SessionsController
     def respond_with(resource, _opt = {})
       @token = request.env['warden-jwt_auth.token']
       headers['Authorization'] = @token
-      render json: { administrator: AdministratorSerializer.new(resource, params: {auth_token: @token}).as_json }, status: :ok
+      render json: { administrator: ADMINISTRATOR_SERIALIZER.new(resource, params: {auth_token: @token}).as_json }, status: :ok
     end
 
     def respond_to_on_destroy
