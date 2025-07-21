@@ -4,7 +4,7 @@ class Api::V1::Drivers::SessionsController < Devise::SessionsController
     def respond_with(resource, _opt = {})
       @token = request.env['warden-jwt_auth.token']
       headers['Authorization'] = @token
-      render json: { driver: DriverSerializer.new(resource, params: {auth_token: @token}).as_json }, status: :ok
+      render json: { driver: DRIVER_SERIALIZER.new(resource, params: {auth_token: @token}).as_json }, status: :ok
     end
 
     def respond_to_on_destroy
