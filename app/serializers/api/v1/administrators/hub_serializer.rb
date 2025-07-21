@@ -1,4 +1,4 @@
-class HubSerializer
+class Api::V1::Administrators::HubSerializer
   include JSONAPI::Serializer
 
   attributes :id, :name, :organization_id, :team_ids

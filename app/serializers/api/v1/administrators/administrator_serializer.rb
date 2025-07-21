@@ -1,4 +1,4 @@
-class AdministratorSerializer
+class Api::V1::Administrators::AdministratorSerializer
   include JSONAPI::Serializer
 
   attributes :id, :email, :first_name, :last_name, :phone_number, :role, :organization_id, :pending_team_ids, :team_ids, :is_active, :is_account_owner, :is_read_only, :invited_by_id, :invited_by_type, :invitation_created_at, :invitation_sent_at, :invitation_accepted_at
