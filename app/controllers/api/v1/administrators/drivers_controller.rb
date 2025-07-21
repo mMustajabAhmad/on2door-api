@@ -5,18 +5,18 @@ class Api::V1::Administrators::DriversController < ApplicationController
     q = @drivers.ransack(params[:q])
     pagy, records = pagy(q.result, page: params[:page],limit: params[:per_page])
 
-    render json: { drivers: DriverSerializer.new(records).as_json, total_count: pagy.count}, status: :ok
+    render json: { drivers: DRIVER_SERIALIZER.new(records).as_json, total_count: pagy.count}, status: :ok
   end
 
   def show
-    render json: { driver: DriverSerializer.new(@driver).as_json }, status: :ok
+    render json: { driver: DRIVER_SERIALIZER.new(@driver).as_json }, status: :ok
   end
 
   def update
     return render json: { error: 'Driver must be assigned to at least one team'}, status: :unprocessable_entity if driver_params[:team_ids].blank?
 
     if @driver.update(driver_params)
-      render json: { driver: DriverSerializer.new(@driver).as_json }, status: :ok
+      render json: { driver: DRIVER_SERIALIZER.new(@driver).as_json }, status: :ok
     else
       render json: { error: driver.errors.full_messages.to_sentence }, status: :unprocessable_entity
     end
