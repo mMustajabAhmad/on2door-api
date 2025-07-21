@@ -5,6 +5,12 @@ class ApplicationController < ActionController::API
   include Pagy::Backend
   include CanCan::ControllerAdditions
 
+  ADMINISTRATOR_SERIALIZER = Api::V1::Administrators::AdministratorSerializer
+  DRIVER_SERIALIZER = Api::V1::Drivers::DriverSerializer
+  HUB_SERIALIZER = Api::V1::Administrators::HubSerializer
+  ORGANIZATION_SERIALIZER = Api::V1::Administrators::OrganizationSerializer
+  TEAM_SERIALIZER = Api::V1::Administrators::TeamSerializer
+
   def current_ability
     @current_ability ||= Ability.new(current_administrator || current_driver)
   end
