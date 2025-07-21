@@ -22,7 +22,7 @@ class Api::V1::Drivers::InvitationsController < Devise::InvitationsController
       current_administrator
     )
 
-    render json: { driver: DriverSerializer.new(driver).as_json }, status: :ok
+    render json: { driver: DRIVER_SERIALIZER.new(driver).as_json }, status: :ok
   end
 
   def update
@@ -36,7 +36,7 @@ class Api::V1::Drivers::InvitationsController < Devise::InvitationsController
     driver.assign_pending_teams
 
     if driver.valid?
-      render json: { driver: DriverSerializer.new(driver).as_json }, status: :ok
+      render json: { driver: DRIVER_SERIALIZER.new(driver).as_json }, status: :ok
     else
       render json: { error: driver.errors.full_messages }, status: :unprocessable_entity
     end
