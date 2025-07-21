@@ -6,18 +6,18 @@ class Api::V1::Administrators::HubsController < ApplicationController
     q = @hubs.includes(:address).ransack(params[:q])
     pagy, records = pagy(q.result, page: params[:page],limit: params[:per_page])
 
-    render json: { hubs: HubSerializer.new(records).as_json, total_count: pagy.count}, status: :ok
+    render json: { hubs: HUB_SERIALIZER.new(records).as_json, total_count: pagy.count}, status: :ok
   end
 
   def show
-    render json: HubSerializer.new(@hub).as_json, status: :ok
+    render json: HUB_SERIALIZER.new(@hub).as_json, status: :ok
   end
 
   def create
     @hub = Hub.new(hub_params)
 
     if @hub.save
-      render json: HubSerializer.new(@hub).as_json, status: :ok
+      render json: HUB_SERIALIZER.new(@hub).as_json, status: :ok
     else
       render json: { error: @hub.errors.full_messages.to_sentence }, status: :unprocessable_entity
     end
@@ -25,7 +25,7 @@ class Api::V1::Administrators::HubsController < ApplicationController
 
   def update
     if @hub.update(hub_params)
-      render json: HubSerializer.new(@hub).as_json, status: :ok
+      render json: HUB_SERIALIZER.new(@hub).as_json, status: :ok
     else
       render json: { error: @hub.errors.full_messages.to_sentence }, status: :unprocessable_entity
     end
