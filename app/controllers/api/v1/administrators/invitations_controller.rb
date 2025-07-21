@@ -19,7 +19,7 @@ class Api::V1::Administrators::InvitationsController < Devise::InvitationsContro
       current_administrator
     )
 
-    render json: { administrator: AdministratorSerializer.new(administrator).as_json }, status: :ok
+    render json: { administrator: ADMINISTRATOR_SERIALIZER.new(administrator).as_json }, status: :ok
   end
 
   def update
@@ -33,7 +33,7 @@ class Api::V1::Administrators::InvitationsController < Devise::InvitationsContro
     administrator.assign_pending_teams
 
     if administrator.valid?
-      render json: { administrator: AdministratorSerializer.new(administrator).as_json }, status: :ok
+      render json: { administrator: ADMINISTRATOR_SERIALIZER.new(administrator).as_json }, status: :ok
     else
       render json: { error: administrator.errors.full_messages }, status: :unprocessable_entity
     end
