@@ -1,5 +1,5 @@
 class Hub < ApplicationRecord
-  belongs_to :organization
+  acts_as_tenant :organization
   has_many :teams, dependent: :restrict_with_error
   has_one :address, as: :addressable, dependent: :destroy
 
