@@ -7,6 +7,7 @@ class Administrator < ApplicationRecord
 
   acts_as_tenant :organization
   has_and_belongs_to_many :teams, dependent: :nullify
+  has_many :tasks, dependent: :nullify
 
   after_invitation_accepted :activate_admin
 

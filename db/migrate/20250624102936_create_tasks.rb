@@ -1,5 +1,5 @@
-class CreateTasks < ActiveRecord::Migration[7.1]
-  def change
+class CreateTasks < ActiveRecord::Migration[7.2]
+  def up
     create_table :tasks do |t|
       t.string :short_id
       t.datetime :complete_after
@@ -20,8 +20,12 @@ class CreateTasks < ActiveRecord::Migration[7.1]
 
     add_reference :tasks, :organization, foreign_key: true
     add_reference :tasks, :driver, foreign_key: true
-    add_reference :tasks, :team, foreign_key: true
-    add_reference :tasks, :creator, foreign_key: { to_table: :administrators }
+    add_reference :tasks, :administrator, foreign_key: true 
     add_reference :tasks, :recipient, foreign_key: true
+    add_reference :tasks, :team, foreign_key: true
+  end
+
+  def down
+    drop_table :tasks
   end
 end
