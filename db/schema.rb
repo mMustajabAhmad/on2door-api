@@ -186,6 +186,16 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_16_172206) do
   end
 
   create_table "task_completion_details", force: :cascade do |t|
+    t.string "failure_reason"
+    t.boolean "success"
+    t.time "datetime"
+    t.string "signature_upload_id"
+    t.string "photo_upload_id"
+    t.string "distance"
+    t.string "notes"
+    t.jsonb "task_completion_events"
+    t.float "first_location", default: [], array: true
+    t.float "last_location", default: [], array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -208,10 +218,10 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_16_172206) do
     t.datetime "updated_at", null: false
     t.bigint "organization_id"
     t.bigint "driver_id"
-    t.bigint "team_id"
-    t.bigint "creator_id"
+    t.bigint "administrator_id"
     t.bigint "recipient_id"
-    t.index ["creator_id"], name: "index_tasks_on_creator_id"
+    t.bigint "team_id"
+    t.index ["administrator_id"], name: "index_tasks_on_administrator_id"
     t.index ["driver_id"], name: "index_tasks_on_driver_id"
     t.index ["organization_id"], name: "index_tasks_on_organization_id"
     t.index ["recipient_id"], name: "index_tasks_on_recipient_id"
@@ -249,7 +259,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_16_172206) do
   add_foreign_key "linked_tasks", "tasks", column: "linked_task_id"
   add_foreign_key "schedules", "drivers"
   add_foreign_key "subschedules", "schedules"
-  add_foreign_key "tasks", "administrators", column: "creator_id"
+  add_foreign_key "tasks", "administrators"
   add_foreign_key "tasks", "drivers"
   add_foreign_key "tasks", "organizations"
   add_foreign_key "tasks", "recipients"
