@@ -33,6 +33,7 @@ Rails.application.routes.draw do
         resources :administrators, only: [:index, :show, :update, :destroy]
         resources :organizations, only: [:index, :update, :destroy]
         resources :hubs, only: [:index, :show, :create, :update, :destroy]
+        resources :drivers, only: [:index, :show, :update, :destroy]
       end
     end
   end
