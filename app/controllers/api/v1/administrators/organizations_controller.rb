@@ -3,12 +3,12 @@ class Api::V1::Administrators::OrganizationsController < ApplicationController
   load_and_authorize_resource
 
   def index
-    render json: { organization: OrganizationSerializer.new(ActsAsTenant.current_tenant).as_json }, status: :ok
+    render json: { organization: ORGANIZATION_SERIALIZER.new(ActsAsTenant.current_tenant).as_json }, status: :ok
   end
 
   def update
     if @organization.update(organization_params)
-      render json: { organization: OrganizationSerializer.new(@organization).as_json }, status: :ok
+      render json: { organization: ORGANIZATION_SERIALIZER.new(@organization).as_json }, status: :ok
     else
       render json: { error: @organization.errors.full_messages.to_sentence }, status: :unprocessable_entity
     end
