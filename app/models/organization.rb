@@ -4,6 +4,7 @@ class Organization < ApplicationRecord
   has_many :drivers, dependent: :destroy
   has_many :teams, dependent: :destroy
   has_many :hubs, dependent: :destroy
+  has_many :tasks, dependent: :destroy
 
   validates :name, presence: true, uniqueness: { case_sensitive: false }
   before_validation :set_timezone_from_country
