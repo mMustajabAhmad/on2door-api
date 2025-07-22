@@ -7,7 +7,8 @@ class CreateSubschedules < ActiveRecord::Migration[7.2]
 
       t.timestamps
     end
-  en
+  end
+
   def down
     drop_table :subschedules
   end
