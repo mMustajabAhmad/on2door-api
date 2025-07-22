@@ -5,7 +5,7 @@ class Administrator < ApplicationRecord
          :recoverable, :rememberable, :validatable,
          :jwt_authenticatable, jwt_revocation_strategy: self
 
-  belongs_to :organization
+  acts_as_tenant :organization
   has_and_belongs_to_many :teams, dependent: :nullify
 
   after_invitation_accepted :activate_admin
@@ -24,7 +24,7 @@ class Administrator < ApplicationRecord
 
   def assign_pending_teams
     return unless pending_team_ids.present?
-    self.teams = Team.where(id: pending_team_ids, organization_id: organization_id)
+    self.teams = Team.where(id: pending_team_ids)
     update(pending_team_ids: nil)
   end
 
