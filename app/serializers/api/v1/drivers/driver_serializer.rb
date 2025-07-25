@@ -9,15 +9,13 @@ class Api::V1::Drivers::DriverSerializer
 
   attribute :auth_token, Proc.new { |driver, params| params[:auth_token] }
 
-  attribute :vehicle_attributes do |driver|
-    return nil unless driver.vehicle
-
-    {
-      id: driver.vehicle.id,
-      license_plate: driver.vehicle.license_plate,
-      type: driver.vehicle.vehicle_type,
-      color: driver.vehicle.color,
-      description: driver.vehicle.description
-    }
+  attribute :vehicle_info do |driver|
+    driver.vehicle && {
+    id: driver.vehicle.id,
+    license_plate: driver.vehicle.license_plate,
+    type: driver.vehicle.vehicle_type,
+    color: driver.vehicle.color,
+    description: driver.vehicle.description
+  }
   end
 end
