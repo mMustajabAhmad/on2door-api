@@ -3,27 +3,27 @@ class Api::V1::Administrators::TaskSerializer
 
   attributes :id, :short_id, :pickup_task, :complete_after, :complete_before, :destination_notes, :linked_task_ids, :service_time, :quantity, :state, :created_at, :driver_id, :team_id, :recipient_id, :address_id, :task_completion_requirements
 
-  attribute :recipient_attributes do |object|
-    return nil unless object.recipient
+  attribute :recipient_attributes do |task|
+    return nil unless task.recipient
 
     {
-      name: object.recipient.name,
-      phone_number: object.recipient.phone_number
+      name: task.recipient.name,
+      phone_number: task.recipient.phone_number
     }
   end
 
-  attribute :address_attributes do |object|
-    return nil unless object.address
+  attribute :address_attributes do |task|
+    return nil unless task.address
 
     {
-      name: object.address.name,
-      street: object.address.street,
-      street_number: object.address.street_number,
-      appartment: object.address.appartment,
-      city: object.address.city,
-      state: object.address.state,
-      postal_code: object.address.postal_code,
-      country: object.address.country
+      name: task.address.name,
+      street: task.address.street,
+      street_number: task.address.street_number,
+      appartment: task.address.appartment,
+      city: task.address.city,
+      state: task.address.state,
+      postal_code: task.address.postal_code,
+      country: task.address.country
     }
   end
 end
