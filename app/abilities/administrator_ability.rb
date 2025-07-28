@@ -9,6 +9,8 @@ class AdministratorAbility
       ability.can :manage, Hub
       ability.can :manage, Driver
       ability.can :manage, Task
+      ability.can :manage, Schedule
+      ability.can :manage, Subschedule
     elsif user.admin?
       ability.can :read, Administrator
       ability.can :create, Administrator, role: ['admin', 'dispatcher']
@@ -21,6 +23,8 @@ class AdministratorAbility
       ability.can :manage, Hub
       ability.can :manage, Driver
       ability.can :manage, Task
+      ability.can :manage, Schedule
+      ability.can :manage, Subschedule
     elsif user.dispatcher?
       ability.can :index, Administrator, role: 'dispatcher', teams: { id: user.team_ids }
       ability.can :update, Administrator, id: user.id
