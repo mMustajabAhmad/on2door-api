@@ -38,6 +38,11 @@ Rails.application.routes.draw do
         resources :drivers, only: [:index, :show, :update, :destroy]
         resources :tasks, only: [:index, :show, :create, :update, :destroy]
       end
+
+      namespace :drivers do
+        resources :schedules, only: [:index, :show, :create, :update, :destroy]
+        resources :subschedules, only: [:index, :show, :create, :update, :destroy]
+      end
     end
   end
 end
