@@ -11,6 +11,8 @@ class ApplicationController < ActionController::API
   ORGANIZATION_SERIALIZER = Api::V1::Administrators::OrganizationSerializer
   TEAM_SERIALIZER = Api::V1::Administrators::TeamSerializer
   TASK_SERIALIZER = Api::V1::Administrators::TaskSerializer
+  SCHEDULE_SERIALIZER = Api::V1::Drivers::ScheduleSerializer
+  SUBSCHEDULE_SERIALIZER = Api::V1::Drivers::SubscheduleSerializer
 
   def current_ability
     @current_ability ||= Ability.new(current_administrator || current_driver)
