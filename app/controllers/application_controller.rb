@@ -10,6 +10,7 @@ class ApplicationController < ActionController::API
   HUB_SERIALIZER = Api::V1::Administrators::HubSerializer
   ORGANIZATION_SERIALIZER = Api::V1::Administrators::OrganizationSerializer
   TEAM_SERIALIZER = Api::V1::Administrators::TeamSerializer
+  TASK_SERIALIZER = Api::V1::Administrators::TaskSerializer
 
   def current_ability
     @current_ability ||= Ability.new(current_administrator || current_driver)

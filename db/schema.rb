@@ -196,8 +196,10 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_16_172206) do
     t.jsonb "task_completion_events"
     t.float "first_location", default: [], array: true
     t.float "last_location", default: [], array: true
+    t.bigint "task_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["task_id"], name: "index_task_completion_details_on_task_id"
   end
 
   create_table "tasks", force: :cascade do |t|
@@ -259,6 +261,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_16_172206) do
   add_foreign_key "linked_tasks", "tasks", column: "linked_task_id"
   add_foreign_key "schedules", "drivers"
   add_foreign_key "subschedules", "schedules"
+  add_foreign_key "task_completion_details", "tasks"
   add_foreign_key "tasks", "administrators"
   add_foreign_key "tasks", "drivers"
   add_foreign_key "tasks", "organizations"
