@@ -11,6 +11,7 @@ class CreateTaskCompletionDetails < ActiveRecord::Migration[7.2]
       t.jsonb :task_completion_events
       t.float :first_location, array: true, default: []
       t.float :last_location, array: true, default: []
+      t.references :task, foreign_key: true
 
       t.timestamps
     end
