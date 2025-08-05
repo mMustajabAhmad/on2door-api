@@ -17,7 +17,8 @@ class Api::V1::Drivers::InvitationsController < Devise::InvitationsController
         last_name: params[:last_name],
         phone_number: params[:phone_number],
         is_active: false,
-        pending_team_ids: params[:team_ids]
+        pending_team_ids: params[:team_ids],
+        vehicle_attributes: vehicle_params
       },
       current_administrator
     )
@@ -41,4 +42,9 @@ class Api::V1::Drivers::InvitationsController < Devise::InvitationsController
       render json: { error: driver.errors.full_messages }, status: :unprocessable_entity
     end
   end
+
+  private
+    def vehicle_params
+      params.permit(:license_plate, :vehicle_type, :color, :description)
+    end
 end
