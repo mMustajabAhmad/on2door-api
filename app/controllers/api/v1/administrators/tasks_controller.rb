@@ -3,7 +3,7 @@ class Api::V1::Administrators::TasksController < ApplicationController
   load_and_authorize_resource
 
   def index
-    q = @tasks.includes(:address).ransack(params[:q])
+    q = @tasks.includes(:address, :recipient).ransack(params[:q])
     pagy, records = pagy(q.result, page: params[:page], limit: params[:per_page])
 
     render json: { tasks: TASK_SERIALIZER.new(records).as_json, total_count: pagy.count }, status: :ok
