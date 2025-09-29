@@ -11,4 +11,19 @@ class Api::V1::Administrators::TaskSerializer
       phone_number: object.recipient.phone_number
     }
   end
+
+  attribute :address_attributes do |object|
+    return nil unless object.address
+
+    {
+      name: object.address.name,
+      street: object.address.street,
+      street_number: object.address.street_number,
+      appartment: object.address.appartment,
+      city: object.address.city,
+      state: object.address.state,
+      postal_code: object.address.postal_code,
+      country: object.address.country
+    }
+  end
 end
