@@ -9,8 +9,7 @@ class Api::V1::Drivers::SessionsController < Devise::SessionsController
 
     def respond_to_on_destroy
       if request.headers['Authorization'].present?
-        jwt_payload = JWT.decode(request.headers['Authorization'].split.last,
-                                Rails.application.credentials.devise_jwt_secret_key!).first
+        jwt_payload = JWT.decode(request.headers['Authorization'].split.last, ENV.fetch('DEVISE_JWT_SECRET_KEY')).first
         current_driver = Driver.find(jwt_payload['sub'])
       end
 
