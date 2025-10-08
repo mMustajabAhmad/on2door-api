@@ -1,3 +1,3 @@
 class Feedback
-  belongs_to :tasks
+  belongs_to :task
 end
