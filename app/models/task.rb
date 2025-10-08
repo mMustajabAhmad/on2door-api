@@ -46,6 +46,8 @@ class Task < ApplicationRecord
     def update_state_on_assignment
       if driver_id.present? && driver_id_changed?
         self.state = :assigned
+      else
+        self.state = :unassigned if driver_id.nil? && driver_id_changed?
       end
     end
 
