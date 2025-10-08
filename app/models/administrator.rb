@@ -23,6 +23,10 @@ class Administrator < ApplicationRecord
     ["id", "email", "first_name", "last_name", "invitation_accepted_at", "is_account_owner", "is_active", "is_read_only", "organization_id", "phone_number", "role"]
   end
 
+  def self.ransackable_associations(auth_object = nil)
+    ["invited_by", "organization", "tasks", "teams"]
+  end
+
   def assign_pending_teams
     return unless pending_team_ids.present?
     self.teams = Team.where(id: pending_team_ids)

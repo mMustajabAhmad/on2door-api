@@ -73,6 +73,8 @@ Rails.application.configure do
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
   config.i18n.fallbacks = true
+  Rails.application.routes.default_url_options[:host] = ENV['HOST_URL']
+  config.action_mailer.default_url_options = { host: ENV['HOST'], protocol: 'https' }
 
   # Don't log any deprecations.
   config.active_support.report_deprecations = false

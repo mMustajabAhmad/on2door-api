@@ -1,5 +1,21 @@
-Hello,
+<% frontend_base = ENV.fetch('FRONTEND_URL', 'http://localhost:3000') %>
+<% accept_link = URI.join(frontend_base + '/', "accept-invitation?invitation_token=#{@token}&email=#{CGI.escape(@resource.email)}").to_s %>
 
-You've been invited to join.
+<p>Hello <%= @resource.first_name || @resource.email %>,</p>
 
-Accept here: <%= accept_invitation_url(@resource, invitation_token: @token) %>
+<% role_text =
+    if @resource.respond_to?(:role) && %w[admin dispatcher].include?(@resource.role)
+      @resource.role
+    else
+      "driver"
+    end
+%>
+
+<p><%= @resource.invited_by.first_name %> has invited you to join their organization as a <%= role_text %>.</p>
+
+<p>You can accept this invitation through the link below:</p>
+
+<p><a href="<%= accept_link %>">Accept Invitation</a></p>
+
+<p>If you don't want to accept this invitation, please ignore this email.</p>
+<p>Your account won't be created until you access the link above and set your password.</p>
