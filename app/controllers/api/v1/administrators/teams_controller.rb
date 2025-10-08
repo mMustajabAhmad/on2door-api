@@ -24,7 +24,20 @@ class Api::V1::Administrators::TeamsController < ApplicationController
   end
 
   def update
-    return render json: { error: 'Team must have atleast one driver' }, status: :unprocessable_entity if team_params[:driver_ids]&.blank?
+    if team_params.key?(:driver_ids)
+      current_driver_ids = @team.driver_ids
+      new_driver_ids = Array(team_params[:driver_ids]).map(&:to_i)
+
+      removed_driver_ids = current_driver_ids - new_driver_ids
+
+      if Driver.joins(:teams)
+              .where(id: removed_driver_ids)
+              .group(:id)
+              .having('COUNT(teams.id) = 1')
+              .exists?
+        return render json: { error: 'Driver is only assigned to this team.' }, status: :unprocessable_entity
+      end
+    end
 
     if @team.update(team_params)
       render json: { team: TEAM_SERIALIZER.new(@team).as_json }, status: :ok
