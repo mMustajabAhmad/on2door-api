@@ -11,7 +11,8 @@ Rails.application.routes.draw do
   controllers: {
     sessions: 'api/v1/administrators/sessions',
     registrations: 'api/v1/administrators/registrations',
-    invitations: 'api/v1/administrators/invitations'
+    invitations: 'api/v1/administrators/invitations',
+    passwords: 'api/v1/passwords'
   }
 
   # Devise routes for Driver
@@ -23,7 +24,8 @@ Rails.application.routes.draw do
   controllers: {
     sessions: 'api/v1/drivers/sessions',
     registrations: 'api/v1/drivers/registrations',
-    invitations: 'api/v1/drivers/invitations'
+    invitations: 'api/v1/drivers/invitations',
+    passwords: 'api/v1/passwords'
   }
 
   namespace :api do
