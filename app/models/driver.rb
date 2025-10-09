@@ -9,6 +9,9 @@ class Driver < ApplicationRecord
   has_and_belongs_to_many :teams, dependent: :nullify
   has_many :schedules, dependent: :destroy
   has_many :subschedules, through: :schedules
+  has_one :vehicle, dependent: :nullify
+
+  accepts_nested_attributes_for :vehicle
 
   after_invitation_accepted :activate_driver
 
