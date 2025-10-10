@@ -13,15 +13,22 @@ class TaskChannel < ApplicationCable::Channel
     if can_update_location?
       validate_location_data(data)
 
-      ActionCable.server.broadcast("task_#{@task.id}", {
-        type: 'location_update',
-        driver_id: current_user.id,
-        driver_name: user_display_name,
-        lat: data["lat"].to_f,
-        lng: data["lng"].to_f,
-        updated_at: Time.current.iso8601,
-        task_id: @task.id
-      })
+      ActionCable.server.broadcast(
+        "task_#{@task.id}",
+        {
+          type: 'location_update',
+          driver_id: current_user.id,
+          driver_name: user_display_name,
+          lat: data["lat"].to_f,
+          lng: data["lng"].to_f,
+          updated_at: Time.current.iso8601,
+          task_id: @task.id,
+          destination: {
+            lat: @task.address&.latitude,
+            lng: @task.address&.longitude
+          }
+        }
+      )
     else
       reject
     end
