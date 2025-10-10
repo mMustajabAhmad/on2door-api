@@ -29,6 +29,7 @@ class Task < ApplicationRecord
   before_create :generate_short_id
   after_initialize :set_default_state, if: :new_record?
   before_save :update_state_on_assignment
+  after_update :broadcast_state_change
 
   def self.ransackable_attributes(auth_object = nil)
     ["state", "short_id", "pickup_task", "complete_after", "complete_before"]
@@ -62,6 +63,29 @@ class Task < ApplicationRecord
       if state_changed?
         if (state == "completed" || state == "failed") && state_was != "active"
           errors.add(:state, "must be active before it can be completed or failed")
+        end
+      end
+    end
+
+    def broadcast_state_change
+      if state_changed?
+        ActionCable.server.broadcast("task_#{id}", {
+          type: 'state_change',
+          task_id: id,
+          old_state: state_was,
+          new_state: state,
+          updated_at: Time.current.iso8601,
+          driver_id: driver_id,
+          administrator_id: administrator_id
+        })
+
+        if state == 'completed' || state == 'failed'
+          ActionCable.server.broadcast("task_#{id}", {
+            type: 'tracking_closed',
+            task_id: id,
+            reason: state,
+            timestamp: Time.current.iso8601
+          })
         end
       end
     end
