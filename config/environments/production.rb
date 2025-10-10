@@ -36,6 +36,15 @@ Rails.application.configure do
   # config.action_cable.mount_path = nil
   # config.action_cable.url = "wss://example.com/cable"
   # config.action_cable.allowed_request_origins = [ "http://example.com", /http:\/\/example.*/ ]
+  # Action Cable configuration
+  config.action_cable.url = "wss://onfleet.onrender.com/cable"
+  config.action_cable.allowed_request_origins = [
+    'https://on2door-fe.vercel.app',   # frontend
+    'https://onfleet.onrender.com'      # backend domain (Render)
+  ]
+
+# Optional (recommended if you deploy via Render or use SSL)
+config.action_cable.disable_request_forgery_protection = true
 
   # Assume all access to the app is happening through a SSL-terminating reverse proxy.
   # Can be used together with config.force_ssl for Strict-Transport-Security and secure cookies.
