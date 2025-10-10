@@ -9,7 +9,8 @@ class Driver < ApplicationRecord
   has_and_belongs_to_many :teams, dependent: :nullify
   has_many :schedules, dependent: :destroy
   has_many :subschedules, through: :schedules
-  has_one :vehicle, dependent: :nullify
+  has_one :vehicle, dependent: :destroy
+  has_many :tasks, dependent: :nullify
 
   accepts_nested_attributes_for :vehicle
 

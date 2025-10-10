@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   get '/icon.png', to: proc { [204, {}, ['']] }
   get "up" => "rails/health#show", as: :rails_health_check
+  mount ActionCable.server => '/cable'
 
   # Devise routes for Administrator
   devise_for :administrators, path: 'api/v1/administrator', path_names: {

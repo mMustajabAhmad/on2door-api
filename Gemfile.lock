@@ -91,6 +91,7 @@ GEM
     countries (8.0.2)
       unaccent (~> 0.3)
     crass (1.0.6)
+    csv (3.3.5)
     date (3.4.1)
     debug (1.11.0)
       irb (~> 1.10)
@@ -124,6 +125,9 @@ GEM
       zeitwerk (~> 2.6)
     erb (5.0.1)
     erubi (1.13.1)
+    geocoder (1.8.6)
+      base64 (>= 0.1.0)
+      csv (>= 3.0.0)
     globalid (1.2.1)
       activesupport (>= 6.1)
     i18n (1.14.7)
@@ -285,6 +289,7 @@ DEPENDENCIES
   devise-jwt
   devise_invitable
   dotenv-rails (~> 2.1, >= 2.1.1)
+  geocoder
   jsonapi-serializer
   pagy (~> 9.3)
   pg (~> 1.1)

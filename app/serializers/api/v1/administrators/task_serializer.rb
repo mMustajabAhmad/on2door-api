@@ -23,7 +23,9 @@ class Api::V1::Administrators::TaskSerializer
       city: task.address.city,
       state: task.address.state,
       postal_code: task.address.postal_code,
-      country: task.address.country
+      country: task.address.country,
+      longitude: task.address.longitude,
+      latitude: task.address.latitude
     }
   end
 end
