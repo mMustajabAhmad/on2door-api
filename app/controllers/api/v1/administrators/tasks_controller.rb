@@ -14,6 +14,13 @@ class Api::V1::Administrators::TasksController < ApplicationController
   end
 
   def create
+    linked_task_ids = task_params[:linked_task_ids]
+  
+    if linked_task_ids.present? &&
+      Task.where(id: linked_task_ids, state: [Task.states[:active], Task.states[:completed]]).exists?
+      return render json: { error: "Some linked tasks are active or completed and cannot be linked." }, status: :unprocessable_entity
+    end
+
     @task = Task.new(task_params.except(:linked_task_ids).merge(administrator: current_administrator))
 
     if @task.save
