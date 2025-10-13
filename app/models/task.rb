@@ -25,6 +25,7 @@ class Task < ApplicationRecord
   validates :address, presence: true
   validates :pickup_task, inclusion: {in: [true, false]}
   validate :valid_state_transition
+  validate :linked_tasks_completion
 
   before_create :generate_short_id
   after_initialize :set_default_state, if: :new_record?
@@ -63,6 +64,16 @@ class Task < ApplicationRecord
       if state_changed?
         if (state == "completed" || state == "failed") && state_was != "active"
           errors.add(:state, "must be active before it can be completed or failed")
+        end
+      end
+    end
+    
+    def linked_tasks_completion
+      if state_changed? && state == "active"
+        incomplete_linked_tasks = linked_tasks.where.not(state: "completed")
+
+        if incomplete_linked_tasks.exists?
+          errors.add(:state, "cannot be set to active until all linked tasks are completed")
         end
       end
     end
