@@ -67,14 +67,11 @@ class Task < ApplicationRecord
         end
       end
     end
-    
-    def linked_tasks_completion
-      if state_changed? && state == "active"
-        incomplete_linked_tasks = linked_tasks.where.not(state: "completed")
 
-        if incomplete_linked_tasks.exists?
-          errors.add(:state, "cannot be set to active until all linked tasks are completed")
-        end
+    def linked_tasks_completion
+      if state_changed? && state == "completed"
+        incomplete_linked_tasks = linked_tasks.where.not(state: "completed")
+        errors.add(:state, "cannot be set to completed until all linked tasks are completed") if incomplete_linked_tasks.exists?
       end
     end
 
