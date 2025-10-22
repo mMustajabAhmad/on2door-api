@@ -2,7 +2,7 @@ class Api::V1::Administrators::DriversController < ApplicationController
   load_and_authorize_resource
 
   def index
-    q = @drivers.include(:vehicle).ransack(params[:q])
+    q = @drivers.includes(:vehicle).ransack(params[:q])
     pagy, records = pagy(q.result, page: params[:page],limit: params[:per_page])
 
     render json: { drivers: DRIVER_SERIALIZER.new(records).as_json, total_count: pagy.count}, status: :ok
