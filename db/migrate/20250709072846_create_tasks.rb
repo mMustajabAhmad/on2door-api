@@ -20,7 +20,7 @@ class CreateTasks < ActiveRecord::Migration[7.2]
 
     add_reference :tasks, :organization, foreign_key: true
     add_reference :tasks, :driver, foreign_key: true
-    add_reference :tasks, :administrator, foreign_key: true 
+    add_reference :tasks, :administrator, foreign_key: true
     add_reference :tasks, :recipient, foreign_key: true
     add_reference :tasks, :team, foreign_key: true
   end
@@ -29,3 +29,4 @@ class CreateTasks < ActiveRecord::Migration[7.2]
     drop_table :tasks
   end
 end
+

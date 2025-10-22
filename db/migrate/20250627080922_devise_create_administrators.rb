@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-class DeviseCreateDrivers < ActiveRecord::Migration[7.1]
+class DeviseCreateAdministrators < ActiveRecord::Migration[7.2]
   def change
-    create_table :drivers do |t|
+    create_table :administrators do |t|
       ## Database authenticatable
       t.string :email,              null: false, default: ""
       t.string :encrypted_password, null: false, default: ""
@@ -36,9 +36,9 @@ class DeviseCreateDrivers < ActiveRecord::Migration[7.1]
       t.timestamps null: false
     end
 
-    add_index :drivers, :email,                unique: true
-    add_index :drivers, :reset_password_token, unique: true
-    # add_index :drivers, :confirmation_token,   unique: true
-    # add_index :drivers, :unlock_token,         unique: true
+    add_index :administrators, :email,                unique: true
+    add_index :administrators, :reset_password_token, unique: true
+    # add_index :administrators, :confirmation_token,   unique: true
+    # add_index :administrators, :unlock_token,         unique: true
   end
 end

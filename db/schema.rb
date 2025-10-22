@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_07_16_172206) do
+ActiveRecord::Schema[7.2].define(version: 2025_09_12_081044) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -40,15 +40,15 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_16_172206) do
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "jti"
+    t.string "jti", null: false
+    t.string "first_name"
+    t.string "last_name"
     t.integer "role"
     t.string "phone_number"
     t.boolean "is_active"
     t.boolean "is_read_only"
     t.boolean "is_account_owner"
     t.bigint "organization_id"
-    t.string "first_name"
-    t.string "last_name"
     t.string "invitation_token"
     t.datetime "invitation_created_at"
     t.datetime "invitation_sent_at"
@@ -62,7 +62,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_16_172206) do
     t.index ["invitation_token"], name: "index_administrators_on_invitation_token", unique: true
     t.index ["invited_by_id"], name: "index_administrators_on_invited_by_id"
     t.index ["invited_by_type", "invited_by_id"], name: "index_administrators_on_invited_by"
-    t.index ["jti"], name: "index_administrators_on_jti"
+    t.index ["jti"], name: "index_administrators_on_jti", unique: true
     t.index ["organization_id"], name: "index_administrators_on_organization_id"
     t.index ["phone_number"], name: "index_administrators_on_phone_number", unique: true
     t.index ["reset_password_token"], name: "index_administrators_on_reset_password_token", unique: true
@@ -83,16 +83,17 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_16_172206) do
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "jti"
+    t.string "jti", null: false
+    t.string "first_name"
+    t.string "last_name"
     t.string "phone_number"
     t.integer "capacity"
     t.string "display_name"
     t.boolean "on_duty"
     t.datetime "delay_time"
+    t.boolean "is_active"
     t.jsonb "analytics"
     t.bigint "organization_id"
-    t.string "first_name"
-    t.string "last_name"
     t.string "invitation_token"
     t.datetime "invitation_created_at"
     t.datetime "invitation_sent_at"
@@ -101,13 +102,12 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_16_172206) do
     t.string "invited_by_type"
     t.bigint "invited_by_id"
     t.integer "invitations_count", default: 0
-    t.boolean "is_active"
     t.integer "pending_team_ids", array: true
     t.index ["email"], name: "index_drivers_on_email", unique: true
     t.index ["invitation_token"], name: "index_drivers_on_invitation_token", unique: true
     t.index ["invited_by_id"], name: "index_drivers_on_invited_by_id"
     t.index ["invited_by_type", "invited_by_id"], name: "index_drivers_on_invited_by"
-    t.index ["jti"], name: "index_drivers_on_jti"
+    t.index ["jti"], name: "index_drivers_on_jti", unique: true
     t.index ["organization_id"], name: "index_drivers_on_organization_id"
     t.index ["phone_number"], name: "index_drivers_on_phone_number", unique: true
     t.index ["reset_password_token"], name: "index_drivers_on_reset_password_token", unique: true
@@ -151,18 +151,16 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_16_172206) do
     t.string "email", null: false
     t.string "country"
     t.string "timezone"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.integer "monthly_delivery_volume"
     t.integer "primary_industry"
     t.text "message"
-    t.index ["email"], name: "index_organizations_on_email", unique: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "recipients", force: :cascade do |t|
     t.string "name"
     t.string "phone_number"
-    t.string "notes"
     t.boolean "skip_sms_notification"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -232,25 +230,24 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_16_172206) do
 
   create_table "teams", force: :cascade do |t|
     t.string "name"
-    t.boolean "enable_self_assign"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.bigint "organization_id"
     t.bigint "hub_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["hub_id"], name: "index_teams_on_hub_id"
     t.index ["organization_id", "name"], name: "index_teams_on_organization_id_and_name", unique: true
     t.index ["organization_id"], name: "index_teams_on_organization_id"
   end
 
   create_table "vehicles", force: :cascade do |t|
-    t.string "license_plate"
-    t.string "vehicle_type"
+    t.string "license_plate", null: false
+    t.integer "vehicle_type"
     t.string "color"
-    t.string "description"
-    t.bigint "drivers_id", null: false
+    t.text "description"
+    t.bigint "driver_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["drivers_id"], name: "index_vehicles_on_drivers_id"
+    t.index ["driver_id"], name: "index_vehicles_on_driver_id"
   end
 
   add_foreign_key "administrators", "organizations"
@@ -269,5 +266,5 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_16_172206) do
   add_foreign_key "tasks", "teams"
   add_foreign_key "teams", "hubs"
   add_foreign_key "teams", "organizations"
-  add_foreign_key "vehicles", "drivers", column: "drivers_id"
+  add_foreign_key "vehicles", "drivers"
 end
