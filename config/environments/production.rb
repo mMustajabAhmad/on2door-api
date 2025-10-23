@@ -52,6 +52,7 @@ Rails.application.configure do
   config.log_level = ENV.fetch("RAILS_LOG_LEVEL", "info")
 
   config.action_mailer.perform_caching = false
+  config.action_mailer.raise_delivery_errors = true
 
   # --- SENDGRID SETUP ---
   config.action_mailer.delivery_method = :smtp
