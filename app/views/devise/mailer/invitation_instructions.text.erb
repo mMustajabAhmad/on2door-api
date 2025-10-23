@@ -1,4 +1,4 @@
-<% frontend_base = ENV.fetch('FRONTEND_URL', 'http://localhost:3000') %>
+<% frontend_base = ENV.fetch('FRONTEND_URL', 'http://localhost:3001') %>
 <% accept_link = URI.join(frontend_base + '/', "accept-invitation?invitation_token=#{@token}&email=#{CGI.escape(@resource.email)}").to_s %>
 
 <p>Hello <%= @resource.first_name || @resource.email %>,</p>
