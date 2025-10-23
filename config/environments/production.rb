@@ -63,15 +63,17 @@ Rails.application.configure do
     user_name:            'apikey',
     password:             ENV['SENDGRID_PASSWORD'],
     authentication:       :plain,
-    enable_starttls_auto: true
+    enable_starttls_auto: true,
+    open_timeout:         5,
+    read_timeout:         5
   }
 
   # Default mailer URLs (for Devise or notifications)
-  config.action_mailer.default_url_options = { host: ENV['HOST'], protocol: 'https' }
-  config.action_mailer.default_options = { from: 'on2dooradmin@gmail.com' }
+  config.action_mailer.default_url_options = { host: ENV['BACKEND_URL']&.gsub(/^https?:\/\//, ''), protocol: 'https' }
+  config.action_mailer.default_options = { from: 'on2door@gmail.com' }
 
   config.i18n.fallbacks = true
-  Rails.application.routes.default_url_options[:host] = ENV['HOST_URL']
+  Rails.application.routes.default_url_options[:host] = ENV['BACKEND_URL']&.gsub(/^https?:\/\//, '')
 
   config.active_support.report_deprecations = false
   config.active_record.dump_schema_after_migration = false
