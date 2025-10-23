@@ -3,7 +3,7 @@ class Api::V1::Administrators::TeamsController < ApplicationController
   load_and_authorize_resource
 
   def index
-    q = @teams.ransack(params[:q])
+    q = @teams.includes(:drivers).ransack(params[:q])
     pagy, records = pagy(q.result, page: params[:page], limit: params[:per_page])
 
     render json: { teams: TEAM_SERIALIZER.new(records).as_json, total_count: pagy.count}, status: :ok
