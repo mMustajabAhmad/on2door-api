@@ -6,18 +6,18 @@ class SendgridMailer < ActionMailer::Base
     @token = token
     @opts = opts
 
-    # Render the Devise template
-    text_content = render_to_string(
+    # Render the Devise template as HTML
+    html_content = render_to_string(
       template: 'devise/mailer/invitation_instructions',
       layout: false,
-      formats: [:text]
+      formats: [:html]
     )
 
     # Send via SendGrid API
     send_sendgrid_email(
       to: record.email,
       subject: 'You have been invited to join OnFleet',
-      text_content: text_content
+      html_content: html_content
     )
   end
 
