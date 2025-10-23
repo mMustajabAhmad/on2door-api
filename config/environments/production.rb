@@ -37,10 +37,10 @@ Rails.application.configure do
   # config.action_cable.url = "wss://example.com/cable"
   # config.action_cable.allowed_request_origins = [ "http://example.com", /http:\/\/example.*/ ]
   # Action Cable configuration
-  config.action_cable.url = "wss://onfleet-utfr.onrender.com/cable"
+  config.action_cable.url = ENV['ACTION_CABLE_URL']
   config.action_cable.allowed_request_origins = [
-    'https://on2door-fe.vercel.app',   # frontend
-    'https://onfleet-utfr.onrender.com'      # backend domain (Render)
+    ENV['FRONTEND_URL'],  # frontend
+    ENV['BACKEND_URL']    # backend
   ]
 
 # Optional (recommended if you deploy via Render or use SSL)
