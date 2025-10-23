@@ -55,18 +55,7 @@ Rails.application.configure do
   config.action_mailer.raise_delivery_errors = true
 
   # --- SENDGRID SETUP ---
-  config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = {
-    address:              'smtp.sendgrid.net',
-    port:                 25,
-    domain:               'onrender.com',
-    user_name:            'apikey',
-    password:             ENV['SENDGRID_PASSWORD'],
-    authentication:       :plain,
-    enable_starttls_auto: true,
-    open_timeout:         5,
-    read_timeout:         5
-  }
+  config.action_mailer.delivery_method = :test
 
   # Default mailer URLs (for Devise or notifications)
   config.action_mailer.default_url_options = { host: ENV['BACKEND_URL']&.gsub(/^https?:\/\//, ''), protocol: 'https' }
