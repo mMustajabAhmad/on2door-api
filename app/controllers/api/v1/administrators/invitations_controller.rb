@@ -19,41 +19,7 @@ class Api::V1::Administrators::InvitationsController < Devise::InvitationsContro
       current_administrator
     )
 
-    # Send email via SendGrid API directly
-    send_invitation_email(administrator)
-
     render json: { administrator: ADMINISTRATOR_SERIALIZER.new(administrator).as_json }, status: :ok
-  end
-
-  private
-
-  def send_invitation_email(administrator)
-    require 'sendgrid-ruby'
-    
-    sg = SendGrid::API.new(api_key: ENV['SENDGRID_PASSWORD'])
-    
-    data = {
-      personalizations: [
-        {
-          to: [{ email: administrator.email }],
-          subject: "You have been invited to join OnFleet"
-        }
-      ],
-      from: { email: 'on2door@gmail.com' },
-      content: [
-        {
-          type: 'text/html',
-          value: "<h1>You have been invited!</h1><p>Click <a href='#{accept_invitation_url(administrator, invitation_token: administrator.raw_invitation_token)}'>here</a> to accept your invitation.</p>"
-        }
-      ]
-    }
-
-    begin
-      response = sg.client.mail._('send').post(request_body: data)
-      Rails.logger.info "SendGrid email sent: #{response.status_code}"
-    rescue => e
-      Rails.logger.error "SendGrid email failed: #{e.message}"
-    end
   end
 
   def update
