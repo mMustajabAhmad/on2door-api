@@ -16,7 +16,7 @@ class SendgridMailer < ActionMailer::Base
     # Send via SendGrid API
     send_sendgrid_email(
       to: record.email,
-      subject: 'You have been invited to join OnFleet',
+      subject: 'You have been invited to join On2Door',
       html_content: html_content
     )
   end
@@ -43,14 +43,10 @@ class SendgridMailer < ActionMailer::Base
 
   private
 
-  def send_sendgrid_email(to:, subject:, text_content: nil, html_content: nil)
+  def send_sendgrid_email(to:, subject:, html_content:)
     return unless Rails.env.production?
 
     sg = SendGrid::API.new(api_key: ENV['SENDGRID_PASSWORD'])
-    
-    content = []
-    content << { type: 'text/plain', value: text_content } if text_content
-    content << { type: 'text/html', value: html_content } if html_content
     
     data = {
       personalizations: [
@@ -60,7 +56,12 @@ class SendgridMailer < ActionMailer::Base
         }
       ],
       from: { email: 'on2door@gmail.com' },
-      content: content
+      content: [
+        {
+          type: 'text/html',
+          value: html_content
+        }
+      ]
     }
 
     begin
