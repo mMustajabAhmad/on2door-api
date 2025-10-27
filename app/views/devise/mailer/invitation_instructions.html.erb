@@ -1,17 +1,12 @@
-<% frontend_base = ENV.fetch('FRONTEND_URL', 'http://localhost:3001') %>
-<% accept_link = URI.join(frontend_base + '/', "accept-invitation?invitation_token=#{@token}&email=#{CGI.escape(@resource.email)}").to_s %>
+<% frontend_base = ENV.fetch('FRONTEND_URL') %>
+<% 
+  role_param = @resource.respond_to?(:role) && %w[admin dispatcher].include?(@resource.role) ? @resource.role : 'driver'
+  accept_link = URI.join(frontend_base + '/', "accept-invitation?invitation_token=#{@token}&email=#{CGI.escape(@resource.email)}&role=#{CGI.escape(role_param)}").to_s  
+%>
 
 <p>Hello <%= @resource.first_name || @resource.email %>,</p>
 
-<% role_text =
-    if @resource.respond_to?(:role) && %w[admin dispatcher].include?(@resource.role)
-      @resource.role
-    else
-      "driver"
-    end
-%>
-
-<p><%= @resource.invited_by.first_name %> has invited you to join their organization as a <%= role_text %>.</p>
+<p><%= @resource.invited_by.first_name %> has invited you to join their organization as a/an <%= role_param %>.</p>
 
 <p>You can accept this invitation through the link below:</p>
 

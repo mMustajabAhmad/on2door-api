@@ -44,8 +44,8 @@ class SendgridMailer < ActionMailer::Base
   private
 
   def send_sendgrid_email(to:, subject:, html_content:)
-    return unless Rails.env.production?
-
+    if Rails.env.production?
+      # Use SendGrid API in production
     sg = SendGrid::API.new(api_key: ENV['SENDGRID_PASSWORD'])
     
     data = {
@@ -64,11 +64,20 @@ class SendgridMailer < ActionMailer::Base
       ]
     }
 
-    begin
-      response = sg.client.mail._('send').post(request_body: data)
-      Rails.logger.info "SendGrid email sent: #{response.status_code}"
-    rescue => e
-      Rails.logger.error "SendGrid email failed: #{e.message}"
+      begin
+        response = sg.client.mail._('send').post(request_body: data)
+        Rails.logger.info "SendGrid email sent: #{response.status_code}"
+      rescue => e
+        Rails.logger.error "SendGrid email failed: #{e.message}"
+      end
+    else
+      # In development fallback to Mailcatcher
+      mail(
+        to: to,
+        subject: subject,
+        body: html_content,
+        content_type: 'text/html'
+      )
     end
   end
 end

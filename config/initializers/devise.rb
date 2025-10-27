@@ -27,7 +27,12 @@ Devise.setup do |config|
   # config.mailer = 'CustomDeviseMailer'
   config.mailer_sender = 'on2door@gmail.com'
   # Configure the class responsible to send e-mails.
-  config.mailer = 'SendgridMailer'
+  if Rails.env.development?
+    config.mailer = 'Devise::Mailer'
+  else
+    config.mailer = 'SendgridMailer'
+  end
+
 
   # Configure the parent class responsible to send e-mails.
   # config.parent_mailer = 'ActionMailer::Base'
