@@ -60,7 +60,7 @@ class Api::V1::Administrators::TasksController < ApplicationController
         :team_id,
         linked_task_ids: [],
         task_completion_requirements: [:customer_signature, :photo_of_delivery, :add_notes],
-        recipient_attributes: [:name, :phone_number],
+        recipient_attributes: [:name, :email, :phone_number],
         address_attributes: [:name, :street, :street_number, :appartment, :city, :state, :postal_code, :country]
       )
     end
