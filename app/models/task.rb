@@ -31,6 +31,7 @@ class Task < ApplicationRecord
   after_initialize :set_default_state, if: :new_record?
   before_save :update_state_on_assignment
   after_update :broadcast_state_change
+  after_create :send_task_tracking_email
 
   def self.ransackable_attributes(auth_object = nil)
     ["state", "short_id", "pickup_task", "complete_after", "complete_before"]
@@ -95,6 +96,18 @@ class Task < ApplicationRecord
             timestamp: Time.current.iso8601
           })
         end
+      end
+    end
+
+    def send_task_tracking_email
+      if recipient.respond_to?(:email) && recipient.email.present?
+        begin
+          TaskMailer.track_task(self).deliver_now
+        rescue => e
+          Rails.logger.error "Failed to enqueue task created email for Task #{id}: #{e.message}"
+        end
+      else
+        Rails.logger.info "No recipient email present for Task #{id}; skipping task-created email"
       end
     end
 end

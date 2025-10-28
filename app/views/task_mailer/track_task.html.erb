@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <p>Hi <%= @recipient.name %>,</p>
+
+    <p>
+      Your order has been successfully placed!
+      Our delivery team has created a task to get your order to you as soon as possible.
+    </p>
+
+    <h4>Order Details</h4>
+    <ul>
+      <li><strong>Status:</strong> <%= @task.state.titleize %></li>
+      <li><strong>Notes:</strong> <%= @task.destination_notes.presence || 'No special instructions' %></li>
+      <li><strong>Delivery Window:</strong> 
+        <%= @task.complete_after.try(:strftime, '%b %d, %Y %I:%M %p') || '—' %> 
+        to 
+        <%= @task.complete_before.try(:strftime, '%b %d, %Y %I:%M %p') || '—' %>
+      </li>
+    </ul>
+
+    <h4>Delivery Contact</h4>
+    <ul>
+      <li><strong>Name:</strong> <%= @recipient.name %></li>
+      <li><strong>Phone:</strong> <%= @recipient.phone_number %></li>
+      <% if @recipient.respond_to?(:email) && @recipient.email.present? %>
+        <li><strong>Email:</strong> <%= @recipient.email %></li>
+      <% end %>
+    </ul>
+
+    <p> You can track your order in real time and see updates about your delivery progress using the link below: </p>
+    <% frontend_base = ENV.fetch('FRONTEND_URL') %>
+    <% tracking_url = URI.join(frontend_base + '/', "order-tracking?task_short_id=#{@task.short_id}&recipient_id=#{@recipient.id}").to_s %>
+
+    <p> <a href="<%= tracking_url %>"> Track Your Order </a> </p>
+
+    <p>
+      Thank you for choosing <strong>On2Door</strong>!  
+      If you didn’t expect this message, please ignore it.
+    </p>
+
+    <p>Regards,<br/>The On2Door Team</p>
+  </body>
+</html>
