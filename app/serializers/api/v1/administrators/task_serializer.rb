@@ -8,7 +8,8 @@ class Api::V1::Administrators::TaskSerializer
 
     {
       name: task.recipient.name,
-      phone_number: task.recipient.phone_number
+      email: task.recipient.email,
+      phone_number: task.recipient.phone_number 
     }
   end
 
