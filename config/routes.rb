@@ -47,6 +47,10 @@ Rails.application.routes.draw do
         resources :subschedules, only: [:index, :show, :create, :update, :destroy]
         resources :tasks, only: [:index, :show, :update]
       end
+
+      namespace :customers do
+        resources :tasks, only: [:show], param: :short_id
+      end
     end
   end
 end
