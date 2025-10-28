@@ -14,14 +14,13 @@ class TaskMailer < ActionMailer::Base
 
     send_sendgrid_email(
       to: @recipient.email,
-      subject: "Your order has been placed - Track your delivery",
+      subject: "Track Your Delivery with On2Door",
       html_content: html_content
     )
   end
 
   private
     def send_sendgrid_email(to:, subject:, html_content:)
-      # development: fall back to ActionMailer delivery (Mailcatcher) below
       if Rails.env.production?
         sg = SendGrid::API.new(api_key: ENV['SENDGRID_PASSWORD'])
 
