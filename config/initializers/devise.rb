@@ -30,7 +30,7 @@ Devise.setup do |config|
   if Rails.env.development?
     config.mailer = 'Devise::Mailer'
   else
-    config.mailer = 'SendgridMailer'
+    config.mailer = 'UserMailer'
   end
 
 
