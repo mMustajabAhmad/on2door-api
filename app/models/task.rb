@@ -32,6 +32,7 @@ class Task < ApplicationRecord
   before_save :update_state_on_assignment
   after_update :broadcast_state_change
   after_create :send_task_tracking_email
+  after_commit :send_assignment_email, if: :driver_assigned?
 
   def self.ransackable_attributes(auth_object = nil)
     ["state", "short_id", "pickup_task", "complete_after", "complete_before"]
@@ -55,6 +56,14 @@ class Task < ApplicationRecord
       else
         self.state = :unassigned if driver_id.nil? && driver_id_changed?
       end
+    end
+
+    def driver_assigned?
+      saved_change_to_driver_id? && driver_id.present?
+    end
+
+    def send_assignment_email
+      TaskMailer.task_assigned(self, self.driver).deliver_later
     end
 
     def set_default_state

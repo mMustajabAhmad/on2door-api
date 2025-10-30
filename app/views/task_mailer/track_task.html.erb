@@ -1,23 +1,18 @@
-<!DOCTYPE html>
-<html>
-  <body>
-    <p>Hi <%= @recipient.name %>,</p>
+<p>Hi <%= @recipient.name %>,</p>
 
-    <p>
-      Your order has been successfully placed!
-    </p>
+<p>
+  Your order has been successfully placed!
+</p>
 
-    <p> You can track your order in real time and see updates about your delivery progress using the link below: </p>
-    <% frontend_base = ENV.fetch('FRONTEND_URL') %>
-    <% tracking_url = URI.join(frontend_base + '/', "order-tracking?task_short_id=#{@task.short_id}&recipient_id=#{@recipient.id}").to_s %>
+<p> You can track your order in real time and see updates about your delivery progress using the link below: </p>
+<% frontend_base = ENV.fetch('FRONTEND_URL') %>
+<% tracking_url = URI.join(frontend_base + '/', "order-tracking?task_short_id=#{@task.short_id}&recipient_id=#{@recipient.id}").to_s %>
 
-    <p> <a href="<%= tracking_url %>"> Track Your Order </a> </p>
+<p> <a href="<%= tracking_url %>"> Track Your Order </a> </p>
 
-    <p>
-      Thank you for choosing <strong>On2Door</strong>!  
-      If you didn’t expect this message, please ignore it.
-    </p>
+<p>
+  Thank you for choosing <strong>On2Door</strong>!
+  If you didn’t expect this message, please ignore it.
+</p>
 
-    <p>Regards,<br/>The On2Door Team</p>
-  </body>
-</html>
+<p>Regards,<br/>The On2Door Team</p>

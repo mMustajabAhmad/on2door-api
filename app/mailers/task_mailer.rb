@@ -1,7 +1,4 @@
-class TaskMailer < ActionMailer::Base
-  require 'sendgrid-ruby'
-  default from: 'on2door@gmail.com'
-
+class TaskMailer < ApplicationMailer
   def track_task(task)
     @task = task
     @recipient = task.recipient
@@ -19,41 +16,18 @@ class TaskMailer < ActionMailer::Base
     )
   end
 
-  private
-    def send_sendgrid_email(to:, subject:, html_content:)
-      if Rails.env.production?
-        sg = SendGrid::API.new(api_key: ENV['SENDGRID_PASSWORD'])
+  def task_assigned(task, driver)
+    @task = task
+    @driver = driver
+    @recipient = task.recipient
+    @address = task.address
 
-        data = {
-          personalizations: [
-            {
-              to: [{ email: to }],
-              subject: subject
-            }
-          ],
-          from: { email: 'on2door@gmail.com' },
-          content: [
-            {
-              type: 'text/html',
-              value: html_content
-            }
-          ]
-        }
+    html_content = render_email_template('task_mailer/task_assigned')
 
-        begin
-          response = sg.client.mail._('send').post(request_body: data)
-          Rails.logger.info "SendGrid email sent: #{response.status_code}"
-        rescue => e
-          Rails.logger.error "SendGrid email failed: #{e.message}"
-        end
-      else
-        # development - Mailcatcher
-        mail(
-          to: to,
-          subject: subject,
-          body: html_content,
-          content_type: 'text/html'
-        )
-      end
-    end
+    send_sendgrid_email(
+      to: driver.email,
+      subject: "New task assigned: #{task.short_id}",
+      html_content: html_content
+    )
+  end
 end
