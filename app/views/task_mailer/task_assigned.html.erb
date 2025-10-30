@@ -1,0 +1,17 @@
+<p>Hi <%= @driver.first_name %>,</p>
+
+<p> Your have been assigned a new task! </p> 
+
+<p> Start your order by logging into your account. </p>
+<p>
+  Task Delivery Window: 
+  <%= @task.complete_after.strftime("%A, %d %b %Y %I:%M %p") %> 
+  to 
+  <%= @task.complete_before.strftime("%A, %d %b %Y %I:%M %p") %>
+</p>
+
+<p>
+  If you didn’t expect this message, please ignore it.
+</p>
+
+<p>Regards,<br/>The On2Door Team</p>

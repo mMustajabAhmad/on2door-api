@@ -15,4 +15,19 @@ class TaskMailer < ApplicationMailer
       html_content: html_content
     )
   end
+
+  def task_assigned(task, driver)
+    @task = task
+    @driver = driver
+    @recipient = task.recipient
+    @address = task.address
+
+    html_content = render_email_template('task_mailer/task_assigned')
+
+    send_sendgrid_email(
+      to: driver.email,
+      subject: "New task assigned: #{task.short_id}",
+      html_content: html_content
+    )
+  end
 end
